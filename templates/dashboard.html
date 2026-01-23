@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8 /">
+    <title>Dashboard</title>
+
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <p>Logged in as: <b>{{current_user.username}}</b></p>
+
+    <nav>
+        <a href="{{url_for('auth.logout') }}">Logout</a>
+    </nav>
+
+    <hr />
+    <p>Next: Challenges + Leaderboard pages.</p>
+
+</body>
+</html>

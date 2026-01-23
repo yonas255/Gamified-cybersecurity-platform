@@ -1,0 +1,13 @@
+﻿<h1>Challenges</h1>
+<p><a href="/">Back to Dashboard</a></p>
+
+<ul>
+  {% for c in challenges %}
+    <li>
+      <a href="/challenges/{{ c.id }}">{{ c.title }}</a>
+      ({{ c.difficulty }}) - {{ c.points }} pts
+    </li>
+  {% else %}
+    <li>No challenges found.</li>
+  {% endfor %}
+</ul>

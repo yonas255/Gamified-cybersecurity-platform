@@ -1,0 +1,21 @@
+﻿<h1>{{ challenge.title }}</h1>
+<p><a href="/challenges">Back to Challenges</a></p>
+
+<p><b>Difficulty:</b> {{ challenge.difficulty }}</p>
+<p><b>Points:</b> {{ challenge.points }}</p>
+<p>{{ challenge.description }}</p>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<form method="POST">
+  <input name="flag" placeholder="Enter flag" required />
+  <button type="submit">Submit Flag</button>
+</form>

@@ -1,0 +1,8 @@
+﻿<h1>Leaderboard</h1>
+<p><a href="/">Back to Dashboard</a></p>
+
+<ol>
+{% for u in users %}
+    <li>{{ u.username }}  {{ u.points }} pts</li>
+{% endfor %}
+</ol>
