@@ -12,6 +12,9 @@ from routes.challenge_routes import challenge_bp
 from routes.leaderboard_routes import leaderboard_bp
 import bcrypt
 from models.challenge import Challenge
+from flask import abort
+from functools import wraps
+
 
 login_manager=LoginManager()
 login_manager.login_view="auth.login"
@@ -34,7 +37,15 @@ def create_app():
     with app.app_context():
         db.create_all()
         
-        
+    def admin_required(fn):
+        @wraps(fn)
+        @login_required
+        def wrapper(*args, **kwargs):
+            if not current_user.is_admin:
+                abort(403)
+            return fn(*args, **kwargs)
+        return wrapper
+    
     
     @app.route("/")
     @login_required
@@ -49,7 +60,7 @@ def create_app():
             
         }
     @app.route("/admin/seed")
-    @login_required
+    @admin_required
     def seed():
         if Challenge.query.first():
             return {"ok": True, "message": "Already seeded"}
@@ -68,7 +79,7 @@ def create_app():
         db.session.commit()
 
         return {"ok": True, "message": "Seeded 1 challenge"}
-
+        
     @app.route("/admin/recalc-points")
     @login_required
     def recalc_points():
