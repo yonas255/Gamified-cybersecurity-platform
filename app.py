@@ -100,6 +100,28 @@ def create_app():
         return {"ok": True, "message": "Recalculated points for all users"}
 
     
+    @app.route("/admin/seed-xss")
+    @admin_required
+    def seed_xss():
+    
+        existing = Challenge.query.filter_by(title="XSS Basics (Reflected) - Simulation").first()
+        if existing:
+            return {"ok": True, "message": "XSS challenge already seeded"}
+
+        flag = "FLAG{xss_reflected_basics}"
+        flag_hash = bcrypt.hashpw(flag.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+        c = Challenge(
+        title="XSS Basics (Reflected) - Simulation",
+        description="Goal: trigger a reflected XSS in a safe demo and find the flag.",
+        difficulty="Beginner",
+        points=100,
+        flag_hash=flag_hash
+    )
+        db.session.add(c)
+        db.session.commit()
+        return {"ok": True, "message": "Seeded XSS challenge"}
+    
     return app
     
 
