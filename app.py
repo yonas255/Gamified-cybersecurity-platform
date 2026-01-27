@@ -14,7 +14,7 @@ import bcrypt
 from models.challenge import Challenge
 from flask import abort
 from functools import wraps
-
+from routes.lab_routes import lab_bp
 
 login_manager=LoginManager()
 login_manager.login_view="auth.login"
@@ -29,6 +29,7 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(challenge_bp)
     app.register_blueprint(leaderboard_bp)
+    app.register_blueprint(lab_bp)
     
     @login_manager.user_loader
     def load_user(user_id):

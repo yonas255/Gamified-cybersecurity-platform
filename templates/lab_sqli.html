@@ -1,0 +1,26 @@
+<h1>SQL Injection Lab ({{ mode }})</h1>
+<p>
+    Mode:
+    <a href="/lab/sqli?mode=vuln">Vulnerable</a> |
+    <a href="/lab/sqli?mode=secure">Secure</a>
+</p>
+<p><a href="/">Back to Dashboard</a></p>
+
+<form method="POST">
+    <input name="username" placeholder="Try username (guest/admin)" value="{{ username }}" required />
+    <button type="submit">Search</button>
+</form>
+
+{% if query_used %}
+    <p><b>Query used:</b> <code>{{ query_used }}</code></p>
+{% endif %}
+
+{% if result %}
+    <p>Found user: <b>{{ result.username }}</b> (role: <b>{{ result.role }}</b>)</p>
+{% else %}
+    <p>No match.</p>
+{% endif %}
+
+{% if flag %}
+    <p><b>Flag:</b> {{ flag }}</p>
+{% endif %}

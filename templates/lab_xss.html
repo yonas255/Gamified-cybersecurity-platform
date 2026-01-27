@@ -1,0 +1,29 @@
+<h1>XSS Lab ({{ mode }})</h1>
+<p>
+    Mode:
+    <a href="/lab/xss?mode=vuln">Vulnerable</a> |
+    <a href="/lab/xss?mode=secure">Secure</a>
+</p>
+<p><a href="/">Back to Dashboard</a></p>
+
+<form method="POST">
+    <input name="text" placeholder="Enter text" value="{{ text }}" required />
+    <button type="submit">Submit</button>
+</form>
+
+{% if rendered is not none %}
+    <hr />
+    <h3>Output</h3>
+
+    {% if mode == "vuln" %}
+    <!-- intentionally unsafe (demo) -->
+    <div>{{ rendered | safe }}</div>
+    {% else %}
+    <!-- safe (auto-escaped) -->
+    <div>{{ rendered }}</div>
+    {% endif %}
+{% endif %}
+
+{% if flag %}
+    <p><b>Flag:</b> {{ flag }}</p>
+{% endif %}
