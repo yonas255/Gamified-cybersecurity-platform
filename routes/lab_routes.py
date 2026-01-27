@@ -2,6 +2,7 @@ import os
 import sqlite3
 from flask import Blueprint, render_template, request, current_app
 from flask_login import login_required
+from flags_local import FLAGS
 
 lab_bp = Blueprint("lab", __name__)
 
@@ -64,7 +65,7 @@ def lab_sqli():
         if row:
             result = {"username": row[0], "role": row[1]}
             if row[1] == "admin":
-                flag = "FLAG{LAB_SQLI_ADMIN_FOUND}"
+                flag = FLAGS["sqli"]
         else:
             result = None
 
@@ -83,6 +84,6 @@ def lab_xss():
         rendered = text  # reflected back (demo)
         # simple “proof” flag when a typical script tag is present (demo only)
         if "<script" in text.lower():
-            flag = "FLAG{LAB_XSS_REFLECTED}"
+            flag = FLAGS["xss"]
 
     return render_template("lab_xss.html", mode=mode, text=text, rendered=rendered, flag=flag)

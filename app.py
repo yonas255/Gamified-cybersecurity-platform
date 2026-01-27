@@ -31,7 +31,7 @@ def create_app():
     app.register_blueprint(leaderboard_bp)
     app.register_blueprint(lab_bp)
     
-    @login_manager.user_loadergit
+    @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
     

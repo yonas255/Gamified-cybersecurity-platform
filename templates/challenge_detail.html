@@ -15,6 +15,21 @@
   {% endif %}
 {% endwith %}
 
+{% if "SQLi" in challenge.title %}
+  <p>
+    <a href="/lab/sqli?mode=vuln&cid={{ challenge.id }}">Open SQLi Lab (Vulnerable)</a> |
+    <a href="/lab/sqli?mode=secure&cid={{ challenge.id }}">View Secure Version</a>
+  </p>
+{% endif %}
+
+{% if "XSS" in challenge.title %}
+  <p>
+    <a href="/lab/xss?mode=vuln&cid={{ challenge.id }}">Open XSS Lab (Vulnerable)</a> |
+    <a href="/lab/xss?mode=secure&cid={{ challenge.id }}">View Secure Version</a>
+  </p>
+{% endif %}
+
+
 <form method="POST">
   <input name="flag" placeholder="Enter flag" required />
   <button type="submit">Submit Flag</button>

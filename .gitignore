@@ -2,3 +2,4 @@
 instance/app.db
 __pycache__/
 .env
+flags_local.py
