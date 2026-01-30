@@ -24,3 +24,23 @@
 {% if flag %}
     <p><b>Flag:</b> {{ flag }}</p>
 {% endif %}
+
+<hr>
+<h3>Why this worked</h3>
+{% if mode == "vuln" %}
+<p>User input is inserted directly into the SQL query, so the query logic can be changed (SQL injection).</p>
+{% else %}
+<p>User input is treated safely and cannot change the SQL query structure.</p>
+{% endif %}
+
+<h3>How it’s fixed</h3>
+<p>Use parameterized queries so input is handled as data, not executable SQL.</p>
+
+<h3>Evidence</h3>
+
+{% if mode == "vuln" %}
+<img src="{{ url_for('static', filename='images/sqli_vulnerable.png') }}" width="500">
+{% else %}
+<img src="{{ url_for('static', filename='images/sqli_secure.png') }}" width="500">
+{% endif %}
+

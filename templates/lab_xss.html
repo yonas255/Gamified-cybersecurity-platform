@@ -27,3 +27,28 @@
 {% if flag %}
     <p><b>Flag:</b> {{ flag }}</p>
 {% endif %}
+
+<hr>
+<h3>Why this worked</h3>
+{% if mode == "vuln" %}
+<p>User input is reflected without escaping, so the browser executes it as JavaScript (XSS).</p>
+{% else %}
+<p>User input is escaped, so scripts show as text and do not run.</p>
+{% endif %}
+
+<h3>How it’s fixed</h3>
+<p>Escape/encode output (and validate input) to prevent script execution.</p>
+
+<h3>Evidence</h3>
+
+{% if mode == "vuln" %}
+
+
+<div>
+<img src="{{ url_for('static', filename='images/xss_vulnerable_.png') }}" width="500" style="display:block;">
+<img src="{{ url_for('static', filename='images/xss_vulnerable.png') }}" width="500" style="display:block; margin-bottom:10px;">
+</div>
+
+{% else %}
+<img src="{{ url_for('static', filename='images/xss_secure.png') }}" width="500">
+{% endif %}
