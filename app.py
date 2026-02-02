@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from config import Config
 from flask_login import LoginManager
+from flags_local import FLAGS
 from models import db
 from models.user import User
 from models.challenge import Challenge
@@ -15,6 +16,8 @@ from models.challenge import Challenge
 from flask import abort
 from functools import wraps
 from routes.lab_routes import lab_bp
+from routes.idor_routes import idor_bp
+from routes.csrf_routes import csrf_bp
 
 login_manager=LoginManager()
 login_manager.login_view="auth.login"
@@ -30,6 +33,8 @@ def create_app():
     app.register_blueprint(challenge_bp)
     app.register_blueprint(leaderboard_bp)
     app.register_blueprint(lab_bp)
+    app.register_blueprint(idor_bp)
+    app.register_blueprint(csrf_bp)
     
     @login_manager.user_loader
     def load_user(user_id):
@@ -113,20 +118,89 @@ def create_app():
         flag_hash = bcrypt.hashpw(flag.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
         c = Challenge(
-        title="XSS Basics (Reflected) - Simulation",
-        description="Goal: trigger a reflected XSS in a safe demo and find the flag.",
-        difficulty="Beginner",
-        points=100,
-        flag_hash=flag_hash
-    )
+            title="XSS Basics (Reflected) - Simulation",
+            description="Goal: trigger a reflected XSS in a safe demo and find the flag.",
+            difficulty="Beginner",
+            points=100,
+            flag_hash=flag_hash
+        )
         db.session.add(c)
         db.session.commit()
         return {"ok": True, "message": "Seeded XSS challenge"}
+    
+    
+    @app.route("/admin/seed-idor")
+    @admin_required
+    def seed_idor():
+        title = "IDOR (Insecure Direct Object Reference)"
+        existing = Challenge.query.filter_by(title=title).first()
+        if existing:
+            return {"ok": True, "message": "IDOR already seeded"}
+
+        flag = FLAGS["idor"]
+        flag_hash = bcrypt.hashpw(flag.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+        c = Challenge(
+            title=title,
+            description="Access another user's data by changing an ID in the URL (safe simulation).",
+            difficulty="Medium",
+            points=150,
+            flag_hash=flag_hash
+        )
+        db.session.add(c)
+        db.session.commit()
+        return {"ok": True, "message": "Seeded IDOR challenge"}
+
+    
+    @app.route("/admin/seed-stored-xss")
+    @admin_required
+    def seed_stored_xss():
+        title = "Stored XSS (Comments) - Simulation"
+        existing = Challenge.query.filter_by(title=title).first()
+        if existing:
+            return {"ok": True, "message": "Stored XSS already seeded"}
+
+        flag = FLAGS["stored_xss"]
+        flag_hash = bcrypt.hashpw(flag.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+        c = Challenge(
+        title=title,
+        description="Post a comment that runs as JavaScript when the page loads (safe demo). Then submit the flag.",
+        difficulty="Medium",
+        points=150,
+        flag_hash=flag_hash
+        )
+        db.session.add(c)
+        db.session.commit()
+        return {"ok": True, "message": "Seeded Stored XSS challenge"}
+
+    @app.route("/admin/seed-csrf")
+    @admin_required
+    def seed_csrf():
+        title = "CSRF (Cross-Site Request Forgery)"
+        existing = Challenge.query.filter_by(title=title).first()
+        if existing:
+            return {"ok": True, "message": "CSRF already seeded"}
+
+        flag = FLAGS["csrf"]
+        flag_hash = bcrypt.hashpw(flag.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+        c = Challenge(
+            title=title,
+            description="Trigger an unauthorised state-changing request due to missing CSRF protection.",
+            difficulty="Hard",
+            points=200,
+            flag_hash=flag_hash
+        )
+        db.session.add(c)
+        db.session.commit()
+        return {"ok": True, "message": "Seeded CSRF challenge"}
+
     
     return app
     
 
 if __name__== "__main__":
-    app = create_app()
-    app.run(debug=True)
+        app = create_app()
+        app.run(debug=True)
     

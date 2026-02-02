@@ -1,0 +1,30 @@
+<h1>IDOR Lab ({{ mode }})</h1>
+
+<p>
+    Mode:
+    <a href="/lab/idor?mode=vuln&uid=2">Vulnerable</a> |
+    <a href="/lab/idor?mode=secure&uid=2">Secure</a>
+</p>
+
+<p><a href="/">Back to Dashboard</a></p>
+
+{% if user %}
+    <p><b>Viewing user:</b> {{ user.username }} (id={{ user.id }})</p>
+{% else %}
+    <p>No access.</p>
+{% endif %}
+
+{% if flag %}
+    <p><b>Flag:</b> {{ flag }}</p>
+{% endif %}
+
+<hr>
+<h3>Why this worked</h3>
+{% if mode == "vuln" %}
+<p>The application trusts the ID in the URL and does not verify ownership.</p>
+{% else %}
+<p>Access is restricted to the authenticated user only.</p>
+{% endif %}
+
+<h3>How it’s fixed</h3>
+<p>Always enforce authorization checks on server-side resources.</p>

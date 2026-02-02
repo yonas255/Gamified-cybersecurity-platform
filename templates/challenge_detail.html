@@ -29,6 +29,20 @@
   </p>
 {% endif %}
 
+{% if "IDOR" in challenge.title %}
+  <p>
+    <a href="/lab/idor?mode=vuln&uid=2">Open IDOR Lab (Vulnerable)</a> |
+    <a href="/lab/idor?mode=secure&uid=2">View Secure Version</a>
+  </p>
+{% endif %}
+
+{% if "CSRF" in challenge.title %}
+  <p>
+    <a href="/lab/csrf?mode=vuln">Open CSRF Lab (Vulnerable)</a> |
+    <a href="/lab/csrf?mode=secure">View Secure Version</a>
+  </p>
+{% endif %}
+
 
 <form method="POST">
   <input name="flag" placeholder="Enter flag" required />
