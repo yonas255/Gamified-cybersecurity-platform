@@ -1,0 +1,30 @@
+<h1>Broken Access Control Lab ({{ mode }})</h1>
+
+<p>
+    Mode:
+    <a href="/lab/bac?mode=vuln">Vulnerable</a> |
+    <a href="/lab/bac?mode=secure">Secure</a>
+</p>
+
+<p><a href="/">Back to Dashboard</a></p>
+
+{% if blocked %}
+<p><b>Access denied.</b> Admin-only page protected.</p>
+{% else %}
+<p>Admin content page.</p>
+{% endif %}
+
+{% if flag %}
+<p><b>Flag:</b> {{ flag }}</p>
+{% endif %}
+
+<hr>
+<h3>Why this worked</h3>
+{% if mode == "vuln" %}
+<p>The page lacked a role/permission check, so normal users could access admin features.</p>
+{% else %}
+<p>The page enforces admin-only access, blocking normal users.</p>
+{% endif %}
+
+<h3>How it’s fixed</h3>
+<p>Enforce authorization checks (e.g., admin_required) on every sensitive route.</p>

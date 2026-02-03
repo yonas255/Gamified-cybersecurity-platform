@@ -43,6 +43,13 @@
   </p>
 {% endif %}
 
+{% if "Broken Access Control" in challenge.title %}
+  <p>
+    <a href="/lab/bac?mode=vuln">Open BAC Lab (Vulnerable)</a> |
+    <a href="/lab/bac?mode=secure">View Secure Version</a>
+  </p>
+{% endif %}
+
 
 <form method="POST">
   <input name="flag" placeholder="Enter flag" required />

@@ -18,6 +18,7 @@ from functools import wraps
 from routes.lab_routes import lab_bp
 from routes.idor_routes import idor_bp
 from routes.csrf_routes import csrf_bp
+from routes.bac_routes import bac_bp
 
 login_manager=LoginManager()
 login_manager.login_view="auth.login"
@@ -35,6 +36,7 @@ def create_app():
     app.register_blueprint(lab_bp)
     app.register_blueprint(idor_bp)
     app.register_blueprint(csrf_bp)
+    app.register_blueprint(bac_bp)
     
     @login_manager.user_loader
     def load_user(user_id):
@@ -195,6 +197,28 @@ def create_app():
         db.session.add(c)
         db.session.commit()
         return {"ok": True, "message": "Seeded CSRF challenge"}
+
+    @app.route("/admin/seed-bac")
+    @admin_required
+    def seed_bac():
+        title = "Broken Access Control (Admin Page)"
+        existing = Challenge.query.filter_by(title=title).first()
+        if existing:
+            return {"ok": True, "message": "BAC already seeded"}
+
+        flag = FLAGS["bac"]
+        flag_hash = bcrypt.hashpw(flag.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+        c = Challenge(
+            title=title,
+            description="Access an admin-only page as a normal user (vulnerable), then see how it’s blocked (secure).",
+            difficulty="Hard",
+            points=200,
+            flag_hash=flag_hash
+        )
+        db.session.add(c)
+        db.session.commit()
+        return {"ok": True, "message": "Seeded BAC challenge"}
 
     
     return app
