@@ -1,13 +1,47 @@
-﻿<h1>Challenges</h1>
-<p><a href="/">Back to Dashboard</a></p>
+﻿{% extends "base.html" %}
 
-<ul>
-  {% for c in challenges %}
-    <li>
-      <a href="/challenges/{{ c.id }}">{{ c.title }}</a>
-      ({{ c.difficulty }}) - {{ c.points }} pts
-    </li>
-  {% else %}
-    <li>No challenges found.</li>
+{% block title %}Challenges{% endblock %}
+{% block header %}Challenges{% endblock %}
+{% block subheader %}Complete Beginner to unlock Medium, complete Medium to unlock Hard{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+  {% for level in ["Beginner","Medium","Hard"] %}
+  <div class="col-12 col-lg-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h2 class="h5">{{ level }}</h2>
+
+        <ul class="list-group list-group-flush">
+          {% for r in rows if r.c.difficulty|lower == level|lower %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+
+              <div>
+                {% if r.unlocked %}
+                  <a class="text-decoration-none" href="/challenges/{{ r.c.id }}">{{ r.c.title }}</a>
+                {% else %}
+                  <span class="text-muted">{{ r.c.title }}</span>
+                {% endif %}
+                <div class="small text-muted">{{ r.c.points }} pts</div>
+              </div>
+
+              {% if r.done %}
+                <span class="badge bg-success">Done</span>
+              {% elif not r.unlocked %}
+                <span class="badge bg-secondary">Locked</span>
+              {% else %}
+                <span class="badge bg-primary">Open</span>
+              {% endif %}
+
+            </li>
+          {% else %}
+            <li class="list-group-item text-muted">No {{ level }} challenges yet.</li>
+          {% endfor %}
+        </ul>
+
+      </div>
+    </div>
+  </div>
   {% endfor %}
-</ul>
+</div>
+{% endblock %}

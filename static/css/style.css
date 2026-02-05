@@ -1,0 +1,19 @@
+/* Professional base */
+.bg-page {
+    background: #f5f6f8;
+}
+
+/* If you add static/images/bg.jpg it will automatically show */
+.bg-page {
+    background: url("../images/pic1.jpg") no-repeat center center fixed, #f5f6f8;
+    background-size: cover;
+}
+
+main.container {
+    min-height: 60vh;
+}
+
+/* Make cards readable on top of background */
+.card {
+    border-radius: 16px;
+}

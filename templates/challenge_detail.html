@@ -1,57 +1,72 @@
-﻿<h1>{{ challenge.title }}</h1>
-<p><a href="/challenges">Back to Challenges</a></p>
+﻿{% extends "base.html" %}
 
-<p><b>Difficulty:</b> {{ challenge.difficulty }}</p>
-<p><b>Points:</b> {{ challenge.points }}</p>
-<p>{{ challenge.description }}</p>
+{% block title %}Challenge{% endblock %}
+{% block header %}{{ challenge.title }}{% endblock %}
+{% block subheader %}{{ challenge.difficulty }} · {{ challenge.points }} pts{% endblock %}
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+{% block content %}
 
-{% if "SQLi" in challenge.title %}
-  <p>
-    <a href="/lab/sqli?mode=vuln&cid={{ challenge.id }}">Open SQLi Lab (Vulnerable)</a> |
-    <a href="/lab/sqli?mode=secure&cid={{ challenge.id }}">View Secure Version</a>
-  </p>
-{% endif %}
+<div class="card shadow-sm mb-3">
+  <div class="card-body">
+    <p class="mb-3">{{ challenge.description }}</p>
 
-{% if "XSS" in challenge.title %}
-  <p>
-    <a href="/lab/xss?mode=vuln&cid={{ challenge.id }}">Open XSS Lab (Vulnerable)</a> |
-    <a href="/lab/xss?mode=secure&cid={{ challenge.id }}">View Secure Version</a>
-  </p>
-{% endif %}
+    <!-- Lab links -->
+    {% if "SQLi" in challenge.title %}
+      <div class="mb-3">
+        <a class="btn btn-danger btn-sm" href="/lab/sqli?mode=vuln">Open SQLi Lab (Vulnerable)</a>
+        <a class="btn btn-success btn-sm" href="/lab/sqli?mode=secure">View Secure Version</a>
+      </div>
+    {% endif %}
 
-{% if "IDOR" in challenge.title %}
-  <p>
-    <a href="/lab/idor?mode=vuln&uid=2">Open IDOR Lab (Vulnerable)</a> |
-    <a href="/lab/idor?mode=secure&uid=2">View Secure Version</a>
-  </p>
-{% endif %}
+    {% if "XSS" in challenge.title %}
+      <div class="mb-3">
+        <a class="btn btn-danger btn-sm" href="/lab/xss?mode=vuln">Open XSS Lab (Vulnerable)</a>
+        <a class="btn btn-success btn-sm" href="/lab/xss?mode=secure">View Secure Version</a>
+      </div>
+    {% endif %}
 
-{% if "CSRF" in challenge.title %}
-  <p>
-    <a href="/lab/csrf?mode=vuln">Open CSRF Lab (Vulnerable)</a> |
-    <a href="/lab/csrf?mode=secure">View Secure Version</a>
-  </p>
-{% endif %}
+    {% if "IDOR" in challenge.title %}
+      <div class="mb-3">
+        <a class="btn btn-danger btn-sm" href="/lab/idor?mode=vuln&uid=1">Open IDOR Lab (Vulnerable)</a>
+        <a class="btn btn-success btn-sm" href="/lab/idor?mode=secure&uid=1">View Secure Version</a>
+      </div>
+    {% endif %}
 
-{% if "Broken Access Control" in challenge.title %}
-  <p>
-    <a href="/lab/bac?mode=vuln">Open BAC Lab (Vulnerable)</a> |
-    <a href="/lab/bac?mode=secure">View Secure Version</a>
-  </p>
-{% endif %}
+    {% if "CSRF" in challenge.title %}
+      <div class="mb-3">
+        <a class="btn btn-danger btn-sm" href="/lab/csrf?mode=vuln">Open CSRF Lab (Vulnerable)</a>
+        <a class="btn btn-success btn-sm" href="/lab/csrf?mode=secure">View Secure Version</a>
+      </div>
+    {% endif %}
 
+    {% if "Broken Access Control" in challenge.title %}
+      <div class="mb-3">
+        <a class="btn btn-danger btn-sm" href="/lab/bac?mode=vuln">Open BAC Lab (Vulnerable)</a>
+        <a class="btn btn-success btn-sm" href="/lab/bac?mode=secure">View Secure Version</a>
+      </div>
+    {% endif %}
 
-<form method="POST">
-  <input name="flag" placeholder="Enter flag" required />
-  <button type="submit">Submit Flag</button>
-</form>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-info">
+          {% for message in messages %}
+            <div>{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Flag submit -->
+    <form method="POST" class="d-flex gap-2">
+      <input class="form-control" name="flag" placeholder="Enter flag" required />
+      <button class="btn btn-dark" type="submit">Submit Flag</button>
+    </form>
+
+    <div class="mt-3">
+      <a class="link-secondary" href="/challenges">← Back to Challenges</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

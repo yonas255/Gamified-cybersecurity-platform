@@ -153,6 +153,10 @@ def create_app():
         db.session.commit()
         return {"ok": True, "message": "Seeded IDOR challenge"}
 
+    @app.route("/debug/challenge-count")
+    def debug_challenge_count():
+        return {"count": Challenge.query.count()}
+
     
     @app.route("/admin/seed-stored-xss")
     @admin_required
