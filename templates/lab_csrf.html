@@ -1,32 +1,46 @@
-<h1>CSRF Lab ({{ mode }})</h1>
+{% extends "base.html"%}
 
-<p>
-    Mode:
-    <a href="/lab/csrf?mode=vuln">Vulnerable</a> |
-    <a href="/lab/csrf?mode=secure">Secure</a>
-</p>
+{% block title %} CSRF Lab{%endblock %}
+{% block header %}CSRF Lab ({{ Mode }}){%endblock %}
+{% block subheader %}Vulnerable vs Secure {%endblock%}
 
-<p><a href="/">Back to Dashboard</a></p>
+{% block content %}
 
-<form method="POST">
-    <button type="submit">Update Email</button>
-</form>
+<div class="card shadow-sm">
+    <div class="card-body">
 
-{% if message %}
-    <p>{{ message }}</p>
-{% endif %}
+        <p>
+            Mode:
+            <a class= "btn btn-danger btn-sm" href="/lab/csrf?mode=vuln">Vulnerable</a> |
+            <a class= "btn btn-success btn-sm" href="/lab/csrf?mode=secure">Secure</a>
+        </p>
 
-{% if flag %}
-    <p><b>Flag:</b> {{ flag }}</p>
-{% endif %}
+        <form method="POST" class="d-flex gap-2 mb-3">
+            <button class="btn btn-dark" type="submit">Update Email</button>
+        </form>
 
-<hr>
-<h3>Why this worked</h3>
-{% if mode == "vuln" %}
-<p>The application accepts state-changing requests without verifying their origin.</p>
-{% else %}
-<p>The application blocks requests that lack a valid CSRF token.</p>
-{% endif %}
+        {% if message %}
+            <div class="alert alert-info">{{ message }}</div>
+        {% endif %}
 
-<h3>How it’s fixed</h3>
-<p>Use CSRF tokens to ensure requests originate from legitimate user interactions.</p>
+        {% if flag %}
+            <div class="alert alert-success"><b>Flag:</b> {{ flag }}</div>
+        {% endif %}
+
+        <hr>
+        <h3>Why this worked</h3>
+        <p class="text-muted">
+
+            {% if mode == "vuln" %}
+            The application accepts state-changing requests without verifying their origin.
+            {% else %}
+            The application blocks requests that lack a valid CSRF token.
+            {% endif %}
+        </p>
+
+        <h3>How it’s fixed</h3>
+        <p class="text-muted">Use CSRF tokens to ensure requests originate from legitimate user interactions.</p>
+
+    </div>
+</div>
+{% endblock %}

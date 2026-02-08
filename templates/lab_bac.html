@@ -1,30 +1,43 @@
-<h1>Broken Access Control Lab ({{ mode }})</h1>
+{% extends "base.html"%}
 
-<p>
-Mode:
-<a href="/lab/bac?mode=vuln">Vulnerable</a> |
-<a href="/lab/bac?mode=secure">Secure</a>
-</p>
+{% block title %} Broken Access Control Lab {%endblock %}
+{% block header %} Broken Access Control Lab  ({{ Mode }}){%endblock %}
+{% block subheader %}Vulnerable vs Secure {%endblock%}
 
-<p><a href="/">Back to Dashboard</a></p>
+{% block content %}
 
-{% if blocked %}
-<p><b>Access denied.</b> Admin-only page protected.</p>
-{% else %}
-<p>Admin content page.</p>
-{% endif %}
+<div class="card shadow-sm">
+    <div class="card-body">
 
-{% if flag %}
-<p><b>Flag:</b> {{ flag }}</p>
-{% endif %}
+        <p>
+        Mode:
+        <a class="btn btn-danger btn-sm" href="/lab/bac?mode=vuln">Vulnerable</a> |
+        <a class="btn btn-success btn-sm" href="/lab/bac?mode=secure">Secure</a>
+        </p>
 
-<hr>
-<h3>Why this worked</h3>
-{% if mode == "vuln" %}
-<p>The page lacked a role/permission check, so normal users could access admin features.</p>
-{% else %}
-<p>The page enforces admin-only access, blocking normal users.</p>
-{% endif %}
+        {% if blocked %}
+            <p><b>Access denied.</b> Admin-only page protected.</p>
+        {% else %}
+            <p>Admin content page.</p>
+        {% endif %}
 
-<h3>How it’s fixed</h3>
-<p>Enforce authorization checks (e.g., admin_required) on every sensitive route.</p>
+        {% if flag %}
+            <div class="alert alert-success"><b>Flag:</b> {{ flag }}</div>
+        {% endif %}
+
+        <hr>
+        <h3>Why this worked</h3>
+        <p class="text-muted">
+            {% if mode == "vuln" %}
+                The page lacked a role/permission check, so normal users could access admin features.
+            {% else %}
+                The page enforces admin-only access, blocking normal users.
+            {% endif %}
+        </p>
+
+        <h3>How it’s fixed</h3>
+        <p class="tex-muted">Enforce authorization checks (e.g., admin_required) on every sensitive route.</p>
+    
+    </div>
+</div>
+{% endblock %}

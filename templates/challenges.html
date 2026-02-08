@@ -25,13 +25,14 @@
                 <div class="small text-muted">{{ r.c.points }} pts</div>
               </div>
 
-              {% if r.done %}
-                <span class="badge bg-success">Done</span>
-              {% elif not r.unlocked %}
+                {% if not r.unlocked %}
                 <span class="badge bg-secondary">Locked</span>
-              {% else %}
+                {% elif r.done %}
+                <span class="badge bg-success">Done</span>
+                {% else %}
                 <span class="badge bg-primary">Open</span>
-              {% endif %}
+                {% endif %}
+
 
             </li>
           {% else %}

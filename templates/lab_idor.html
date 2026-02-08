@@ -1,30 +1,40 @@
-<h1>IDOR Lab ({{ mode }})</h1>
+{% extends "base.html"%}
 
-<p>
-    Mode:
-    <a href="/lab/idor?mode=vuln&uid=2">Vulnerable</a> |
-    <a href="/lab/idor?mode=secure&uid=2">Secure</a>
-</p>
+{% block title %} IDOR Lab {%endblock %}
+{% block header %} IDOR Lab  ({{ Mode }}){%endblock %}
+{% block subheader %}Vulnerable vs Secure {%endblock%}
 
-<p><a href="/">Back to Dashboard</a></p>
+{% block content %}
 
-{% if user %}
-    <p><b>Viewing user:</b> {{ user.username }} (id={{ user.id }})</p>
-{% else %}
-    <p>No access.</p>
-{% endif %}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <p>
+            Mode:
+            <a class="btn btn-danger btn-sm" href="/lab/idor?mode=vuln&uid=2">Vulnerable</a> |
+            <a class="btn btn-success btn-sm" href="/lab/idor?mode=secure&uid=2">Secure</a>
+        </p>
 
-{% if flag %}
-    <p><b>Flag:</b> {{ flag }}</p>
-{% endif %}
+        {% if user %}
+            <p><b>Viewing user:</b> {{ user.username }} (id={{ user.id }})</p>
+        {% else %}
+            <p>No access.</p>
+        {% endif %}
 
-<hr>
-<h3>Why this worked</h3>
-{% if mode == "vuln" %}
-<p>The application trusts the ID in the URL and does not verify ownership.</p>
-{% else %}
-<p>Access is restricted to the authenticated user only.</p>
-{% endif %}
+        {% if flag %}
+            <div class="alert alert-success"><b>Flag:</b> {{ flag }}</p>
+        {% endif %}
 
-<h3>How it’s fixed</h3>
-<p>Always enforce authorization checks on server-side resources.</p>
+        <hr>
+        <h3>Why this worked</h3>
+        <p class="text-muted">
+            {% if mode == "vuln" %}
+            The application trusts the ID in the URL and does not verify ownership.
+            {% else %}
+            Access is restricted to the authenticated user only.
+            {% endif %}
+        </p>
+        <h3>How it’s fixed</h3>
+        <p class="text-muted">Always enforce authorization checks on server-side resources.</p>
+    </div>
+</div>
+{% endblock %}

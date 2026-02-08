@@ -1,46 +1,59 @@
-<h1>SQL Injection Lab ({{ mode }})</h1>
-<p>
-    Mode:
-    <a href="/lab/sqli?mode=vuln">Vulnerable</a> |
-    <a href="/lab/sqli?mode=secure">Secure</a>
-</p>
-<p><a href="/">Back to Dashboard</a></p>
+{% extends "base.html"%}
 
-<form method="POST">
-    <input name="username" placeholder="Try username (guest/admin)" value="{{ username }}" required />
-    <button type="submit">Search</button>
-</form>
+{% block title %} SQL Injection Lab{%endblock %}
+{% block header %}SQL Injection Lab ({{ Mode }}){%endblock %}
+{% block subheader %}Vulnerable vs Secure {%endblock%}
 
-{% if query_used %}
-    <p><b>Query used:</b> <code>{{ query_used }}</code></p>
-{% endif %}
+{% block content %}
 
-{% if result %}
-    <p>Found user: <b>{{ result.username }}</b> (role: <b>{{ result.role }}</b>)</p>
-{% else %}
-    <p>No match.</p>
-{% endif %}
+<div class="card shadow-sm">
+    <div class="card-body">
 
-{% if flag %}
-    <p><b>Flag:</b> {{ flag }}</p>
-{% endif %}
+        <p>
+            Mode:
+            <a class="btn btn-danger btn-sm" href="/lab/sqli?mode=vuln">Vulnerable</a> |
+            <a class="btn btn-success btn-sm" href="/lab/sqli?mode=secure">Secure</a>
+        </p>
 
-<hr>
-<h3>Why this worked</h3>
-{% if mode == "vuln" %}
-<p>User input is inserted directly into the SQL query, so the query logic can be changed (SQL injection).</p>
-{% else %}
-<p>User input is treated safely and cannot change the SQL query structure.</p>
-{% endif %}
+        <form method="POST" class="d-flex gap-2 mb-3">
+            <input name="username" placeholder="Try username (guest/admin)" value="{{ username }}" required />
+            <button class="btn btn-dark" type="submit">Search</button>
+        </form>
 
-<h3>How it’s fixed</h3>
-<p>Use parameterized queries so input is handled as data, not executable SQL.</p>
+        {% if query_used %}
+            <p><b>Query used:</b> <code>{{ query_used }}</code></p>
+        {% endif %}
 
-<h3>Evidence</h3>
+        {% if result %}
+            <p>Found user: <b>{{ result.username }}</b> (role: <b>{{ result.role }}</b>)</p>
+        {% else %}
+            <p>No match.</p>
+        {% endif %}
 
-{% if mode == "vuln" %}
-<img src="{{ url_for('static', filename='images/sqli_vulnerable.png') }}" width="500">
-{% else %}
-<img src="{{ url_for('static', filename='images/sqli_secure.png') }}" width="500">
-{% endif %}
+        {% if flag %}
+            <div=class"alert alert-success"><b>Flag:</b> {{ flag }}</p>
+        {% endif %}
 
+        <hr>
+        <h5>Why this worked</h5>
+        <p class="text-muted">
+            {% if mode == "vuln" %}
+                User input is inserted directly into the SQL query, so the query logic can be changed (SQL injection).
+            {% else %}
+                <p>User input is treated safely and cannot change the SQL query structure.
+            {% endif %}
+        </p>
+
+        <h5>How it’s fixed</h5>
+        <p class="text-muted">Use parameterized queries so input is handled as data, not executable SQL.</p>
+
+        <h5>Evidence</h5>
+
+        {% if mode == "vuln" %}
+        <img src="{{ url_for('static', filename='images/sqli_vulnerable.png') }}" width="500">
+        {% else %}
+        <img src="{{ url_for('static', filename='images/sqli_secure.png') }}" width="500">
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

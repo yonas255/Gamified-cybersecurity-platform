@@ -1,54 +1,65 @@
-<h1>XSS Lab ({{ mode }})</h1>
-<p>
-    Mode:
-    <a href="/lab/xss?mode=vuln">Vulnerable</a> |
-    <a href="/lab/xss?mode=secure">Secure</a>
-</p>
-<p><a href="/">Back to Dashboard</a></p>
+{% extends "base.html"%}
 
-<form method="POST">
-    <input name="text" placeholder="Enter text" value="{{ text }}" required />
-    <button type="submit">Submit</button>
-</form>
+{% block title %} XSS Lab{%endblock %}
+{% block header %} XSS Lab ({{ Mode }}){%endblock %}
+{% block subheader %}Vulnerable vs Secure {%endblock%}
 
-{% if rendered is not none %}
-    <hr />
-    <h3>Output</h3>
+{% block content %}
 
-    {% if mode == "vuln" %}
-    <!-- intentionally unsafe (demo) -->
-    <div>{{ rendered | safe }}</div>
-    {% else %}
-    <!-- safe (auto-escaped) -->
-    <div>{{ rendered }}</div>
-    {% endif %}
-{% endif %}
+<div class="card shadow-sm">
+    <div class="card-body">
 
-{% if flag %}
-    <p><b>Flag:</b> {{ flag }}</p>
-{% endif %}
+        <p>
+            Mode:
+            <a class="btn btn-danger btn-sm" href="/lab/xss?mode=vuln">Vulnerable</a> |
+            <a class="btn btn-success btn-sm" href="/lab/xss?mode=secure">Secure</a>
+        </p>
 
-<hr>
-<h3>Why this worked</h3>
-{% if mode == "vuln" %}
-<p>User input is reflected without escaping, so the browser executes it as JavaScript (XSS).</p>
-{% else %}
-<p>User input is escaped, so scripts show as text and do not run.</p>
-{% endif %}
+        <form method="POST" class="d-flex gap-2 mb-3">
+            <input name="text" placeholder="Enter text" value="{{ text }}" required />
+            <button class="btn btn-dark" type="submit">Submit</button>
+        </form>
 
-<h3>How it’s fixed</h3>
-<p>Escape/encode output (and validate input) to prevent script execution.</p>
+        {% if rendered is not none %}
+            <h3>Output</h3>
 
-<h3>Evidence</h3>
+            {% if mode == "vuln" %}
+            <!-- intentionally unsafe (demo) -->
+            <div>{{ rendered | safe }}</div>
+            {% else %}
+            <!-- safe (auto-escaped) -->
+            <div>{{ rendered }}</div>
+            {% endif %}
+        {% endif %}
 
-{% if mode == "vuln" %}
+        {% if flag %}
+            <div class"alert alert-success"><b>Flag:</b> {{ flag }}</div>
+        {% endif %}
+
+        <hr>
+        <h5>Why this worked</h5>
+        {% if mode == "vuln" %}
+        <p>User input is reflected without escaping, so the browser executes it as JavaScript (XSS).</p>
+        {% else %}
+        <p>User input is escaped, so scripts show as text and do not run.</p>
+        {% endif %}
+
+        <h5>How it’s fixed</h5>
+        <p>Escape/encode output (and validate input) to prevent script execution.</p>
+
+        <h5>Evidence</h5>
+
+        {% if mode == "vuln" %}
 
 
-<div>
-<img src="{{ url_for('static', filename='images/xss_vulnerable_.png') }}" width="500" style="display:block;">
-<img src="{{ url_for('static', filename='images/xss_vulnerable.png') }}" width="500" style="display:block; margin-bottom:10px;">
+        <div>
+        <img src="{{ url_for('static', filename='images/xss_vulnerable_.png') }}" width="500" style="display:block;">
+        <img src="{{ url_for('static', filename='images/xss_vulnerable.png') }}" width="500" style="display:block; margin-bottom:10px;">
+        </div>
+
+        {% else %}
+        <img src="{{ url_for('static', filename='images/xss_secure.png') }}" width="500">
+        {% endif %}
+    </div>
 </div>
-
-{% else %}
-<img src="{{ url_for('static', filename='images/xss_secure.png') }}" width="500">
-{% endif %}
+{% endblock %}
