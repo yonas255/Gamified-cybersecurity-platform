@@ -16,6 +16,10 @@ def completed_ids_for_user(user_id: int) -> set[int]:
 
 
 def is_unlocked(challenge: Challenge, done_ids: set[int]) -> bool:
+    # ✅ Admin can access everything
+    if current_user.is_authenticated and getattr(current_user, "is_admin", False):
+        return True
+
     if challenge.difficulty == "Beginner":
         return True
 

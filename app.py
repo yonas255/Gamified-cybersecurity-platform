@@ -19,6 +19,7 @@ from routes.lab_routes import lab_bp
 from routes.idor_routes import idor_bp
 from routes.csrf_routes import csrf_bp
 from routes.bac_routes import bac_bp
+from routes.admin_routes import admin_bp
 
 login_manager=LoginManager()
 login_manager.login_view="auth.login"
@@ -37,6 +38,7 @@ def create_app():
     app.register_blueprint(idor_bp)
     app.register_blueprint(csrf_bp)
     app.register_blueprint(bac_bp)
+    app.register_blueprint(admin_bp)
     
     @login_manager.user_loader
     def load_user(user_id):

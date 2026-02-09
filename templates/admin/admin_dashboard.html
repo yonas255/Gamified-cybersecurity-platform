@@ -1,0 +1,23 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Admin{% endblock %}
+{% block header %}Admin Dashboard{% endblock %}
+{% block subheader %}Manage challenges (admin-only){% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <p class="mb-3">Admin tools:</p>
+
+    <div class="d-flex flex-wrap gap-2">
+      <a class="btn btn-dark" href="/admin/challenges/new">Create Challenge</a>
+      <a class="btn btn-outline-dark" href="/admin/challenges">Manage Challenges</a>
+    </div>
+
+    <hr>
+    <p class="small text-muted mb-0">
+      Only users marked as admin can access this page.
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Edit Challenge{% endblock %}
+{% block header %}Edit Challenge{% endblock %}
+{% block subheader %}Admin-only: update challenge details{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-lg-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+
+        <form method="POST" class="d-grid gap-2">
+          <label class="form-label">Title</label>
+          <input class="form-control" name="title" value="{{ c.title }}" required>
+
+          <label class="form-label mt-2">Description</label>
+          <textarea class="form-control" name="description" rows="4" required>{{ c.description }}</textarea>
+
+          <div class="row mt-2">
+            <div class="col-md-6">
+              <label class="form-label">Difficulty</label>
+              <select class="form-select" name="difficulty">
+                <option {% if c.difficulty|lower == "beginner" %}selected{% endif %}>Beginner</option>
+                <option {% if c.difficulty|lower == "medium" %}selected{% endif %}>Medium</option>
+                <option {% if c.difficulty|lower == "hard" %}selected{% endif %}>Hard</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Points</label>
+              <input class="form-control" type="number" name="points" value="{{ c.points }}" min="0" required>
+            </div>
+          </div>
+          <label class="form-label mt-2">Lab Type</label>
+            <select class="form-select" name="lab_type">
+              <option value="none">None (no lab)</option>
+              <option value="sqli">SQLi</option>
+              <option value="xss">XSS (reflected)</option>
+              <option value="stored_xss">Stored XSS</option>
+              <option value="idor">IDOR</option>
+              <option value="csrf">CSRF</option>
+              <option value="bac">Broken Access Control</option>
+            </select>
+
+          <label class="form-label mt-2">New Flag (optional)</label>
+          <input class="form-control" name="flag" placeholder="Leave blank to keep current flag">
+
+          <button class="btn btn-dark mt-3" type="submit">Save Changes</button>
+          <a class="btn btn-outline-dark" href="/admin/challenges">Back</a>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

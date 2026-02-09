@@ -8,3 +8,4 @@ class Challenge(db.Model):
     difficulty=db.Column(db.String(20), default="Beginner")
     points=db.Column(db.Integer, default=100)
     flag_hash=db.Column(db.String(250), nullable=False)#storing hashed flag, not plain text
+    lab_type = db.Column(db.String(20), default = "none")

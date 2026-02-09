@@ -1,0 +1,51 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Manage Challenges{% endblock %}
+{% block header %}Manage Challenges{% endblock %}
+{% block subheader %}Admin-only: edit or delete challenges{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <a class="btn btn-dark btn-sm" href="/admin/challenges/new">+ New Challenge</a>
+      <a class="btn btn-outline-dark btn-sm" href="/admin">Back</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-striped align-middle mb-0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Difficulty</th>
+            <th>Points</th>
+            <th style="width: 180px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in challenges %}
+          <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.title }}</td>
+            <td>{{ c.difficulty }}</td>
+            <td>{{ c.points }}</td>
+            <td>
+              <a class="btn btn-outline-dark btn-sm" href="/admin/challenges/{{ c.id }}/edit">Edit</a>
+
+              <form method="POST" action="/admin/challenges/{{ c.id }}/delete" class="d-inline">
+                <button class="btn btn-outline-danger btn-sm" type="submit"
+                        onclick="return confirm('Delete this challenge?');">
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
