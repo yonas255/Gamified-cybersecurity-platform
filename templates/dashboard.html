@@ -5,6 +5,28 @@
 {% block subheader %}Choose a challenge level and learn safely{% endblock %}
 
 {% block content %}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="mb-2">Your Progress</h5>
+        <div class="progress" style="height: 22px;">
+            <div
+                id="progressBar"
+                class="progress-bar bg-success"
+                role="progressbar"
+                style="width: 0%;"
+                aria-valuenow="{{ percent }}"
+                aria-valuemin="0"
+                aria-valuemax="100">
+                {{ percent }}%
+            </div>
+        </div>
+            <small class="text-muted d-block mt-2">
+            {{ completed }} / {{ total }} challenges completed
+            </small>
+    </div>
+</div>
+
 <div class="card shadow-sm">
     <div class="card-body">
         <p class="mb-2">Logged in as: <b>{{ current_user.username }}</b></p>

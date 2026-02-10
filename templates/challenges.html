@@ -5,6 +5,9 @@
 {% block subheader %}Complete Beginner to unlock Medium, complete Medium to unlock Hard{% endblock %}
 
 {% block content %}
+
+<div id="lockAlert" class="alert alert-warning d-none" role="alert"></div>
+
 <div class="row g-4">
   {% for level in ["Beginner","Medium","Hard"] %}
   <div class="col-12 col-lg-4">
@@ -25,9 +28,15 @@
                 {% if r.unlocked %}
                   <a class="text-decoration-none fw-semibold" href="/challenges/{{ r.c.id }}">{{ r.c.title }}</a>
                 {% else %}
-                  <span class="text-muted fw-semibold">{{ r.c.title }}</span>
+                  <span class="text-muted fw-semibold locked-link"
+                        data-level="{{ r.c.difficulty }}"
+                        role="button"
+                        tabindex="0">
+                    {{ r.c.title }}
+                  </span>
                   <span class="ms-2 badge bg-light text-dark border">Finish previous level</span>
                 {% endif %}
+
                 <div class="small text-muted">{{ r.c.points }} pts</div>
               </div>
 

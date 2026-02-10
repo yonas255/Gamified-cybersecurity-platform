@@ -1,7 +1,7 @@
 import bcrypt
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_user, logout_user, login_required
-
+from flask_login import current_user, login_user, logout_user, login_required
+from audit import audit
 from models import db
 from models.user import User
 
@@ -49,10 +49,12 @@ def login():
         # IMPORTANT: password_hash (not password_hashed)
         if not bcrypt.checkpw(password.encode("utf-8"), user.password_hash.encode("utf-8")):
             flash("Invalid username or password.")
+            audit("LOGIN_FAILED", None, {"username": username})
             return redirect(url_for("auth.login"))
 
         login_user(user)
         flash("Login successful!")
+        audit("LOGIN_SUCCESS", user)
         return redirect(url_for("dashboard"))
 
     return render_template("login.html")
@@ -63,4 +65,5 @@ def login():
 def logout():
     logout_user()
     flash("Logged out")
+    audit("LOGOUT", current_user)
     return redirect(url_for("auth.login"))

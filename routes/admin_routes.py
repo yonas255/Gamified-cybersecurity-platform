@@ -1,11 +1,12 @@
 ﻿from flask import Blueprint, render_template
-from flask_login import login_required
+from flask_login import current_user, login_required
 from decorators import admin_required
 import bcrypt
 from flask import request, redirect, url_for, flash
 from models import db
+from models import challenge
 from models.challenge import Challenge
-
+from audit import audit
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 @admin_bp.route("/")
@@ -45,6 +46,7 @@ def create_challenge():
         db.session.commit()
 
         flash("Challenge created successfully.")
+        audit("ADMIN_CREATE_CHALLENGE", current_user, {"title": title})
         return redirect(url_for("admin.dashboard"))
 
     return render_template("admin/challenge_create.html")
@@ -75,6 +77,7 @@ def edit_challenge(challenge_id):
 
         db.session.commit()
         flash("Challenge updated.")
+        audit("ADMIN_EDIT_CHALLENGE", current_user, {"challenge_id": challenge.id})
         return redirect(url_for("admin.manage_challenges"))
 
     return render_template("admin/challenge_edit.html", c=c)
@@ -87,4 +90,5 @@ def delete_challenge(challenge_id):
     db.session.delete(c)
     db.session.commit()
     flash("Challenge deleted.")
+    audit("ADMIN_DELETE_CHALLENGE", current_user, {"challenge_id": challenge.id})
     return redirect(url_for("admin.manage_challenges"))

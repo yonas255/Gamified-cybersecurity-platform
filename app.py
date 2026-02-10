@@ -55,12 +55,24 @@ def create_app():
                 abort(403)
             return fn(*args, **kwargs)
         return wrapper
-    
-    
+
     @app.route("/")
     @login_required
     def dashboard():
-        return render_template("dashboard.html")
+        total = Challenge.query.count()
+        completed = Submission.query.filter_by(
+            user_id=current_user.id,
+            is_correct=True
+        ).distinct(Submission.challenge_id).count()
+
+        percent = int((completed / total) * 100) if total > 0 else 0
+
+        return render_template(
+            "dashboard.html",
+            total=total,
+            completed=completed,
+            percent=percent
+        )
     @app.route("/debug/me")
     def debug_me():
         return {
