@@ -6,7 +6,7 @@ from models import db
 from models.challenge import Challenge
 from models.submission import Submission
 from models.user import User
-
+from rate_limiter import check
 
 challenge_bp = Blueprint("challenges", __name__)
 
@@ -64,6 +64,13 @@ def challenge_detail(challenge_id):
         return redirect(url_for("challenges.list_challenges"))
     
     if request.method == "POST":
+        key = f"flag:{current_user.id}:{challenge.id}"
+        allowed, remaining, retry_after = check(key, limit=10, window_seconds=60)
+        if not allowed:
+            flash(f"Too many flag attempts. Try again in {retry_after}s.")
+            return redirect(url_for("challenges.challenge_detail", challenge_id=challenge.id))
+
+        
         submitted_flag = request.form.get("flag", "")
 
         # check flag against stored hash

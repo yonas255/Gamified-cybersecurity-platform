@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, make_response, render_template
 from config import Config
 from flask_login import LoginManager
 from flags_local import FLAGS
@@ -20,6 +20,7 @@ from routes.idor_routes import idor_bp
 from routes.csrf_routes import csrf_bp
 from routes.bac_routes import bac_bp
 from routes.admin_routes import admin_bp
+from flask import request
 
 login_manager=LoginManager()
 login_manager.login_view="auth.login"
@@ -39,6 +40,41 @@ def create_app():
     app.register_blueprint(csrf_bp)
     app.register_blueprint(bac_bp)
     app.register_blueprint(admin_bp)
+    
+    
+    from flask import request
+
+    @app.after_request
+    def add_security_headers(response):
+        # Basic hardening (safe everywhere)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+
+        # CSP: strict for platform, relaxed for labs (so XSS demos still work)
+        if request.path.startswith("/lab/"):
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "style-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; "
+                "script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; "
+                "img-src 'self' data:; "
+            )
+        else:
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "style-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; "
+                "script-src 'self' https://cdn.jsdelivr.net; "
+                "img-src 'self' data:; "
+            )
+
+
+        return response
+
+    @app.route("/debug/headers")
+    def debug_headers():
+        resp = make_response({"ok": True})
+        return resp
     
     @login_manager.user_loader
     def load_user(user_id):

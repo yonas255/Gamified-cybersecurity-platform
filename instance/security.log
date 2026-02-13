@@ -1,2 +1,55 @@
 2026-02-10T00:21:59.495576 | LOGOUT | user=anonymous | extra=None
 2026-02-10T00:22:12.918119 | LOGIN_SUCCESS | user=yon255 | extra=None
+2026-02-10T14:45:55.589004 | LOGIN_SUCCESS | user=yon255 | extra=None
+2026-02-11T13:59:53.012902 | LOGOUT | user=anonymous | extra=None
+2026-02-11T14:00:02.612690 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:00:18.263047 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:00:30.243589 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:05:44.848848 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:05:54.050671 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:06:08.897958 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:06:31.085540 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:06:37.291097 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:06:54.255486 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:07:09.279874 | LOGIN_SUCCESS | user=yon25 | extra=None
+2026-02-11T14:07:37.597762 | LOGOUT | user=anonymous | extra=None
+2026-02-11T14:07:43.693216 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:07:50.058017 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:07:56.088915 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:08:02.021804 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:08:18.110799 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25'}
+2026-02-11T14:33:54.010998 | LOGIN_SUCCESS | user=yon25 | extra=None
+2026-02-11T14:34:02.332594 | LOGOUT | user=anonymous | extra=None
+2026-02-11T14:34:08.417691 | LOGIN_SUCCESS | user=yon25 | extra=None
+2026-02-11T14:39:22.576030 | LOGOUT | user=anonymous | extra=None
+2026-02-11T14:39:32.142824 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon255', 'ip': '127.0.0.1'}
+2026-02-11T14:39:40.853465 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25', 'ip': '127.0.0.1'}
+2026-02-11T14:39:50.445570 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon255', 'ip': '127.0.0.1'}
+2026-02-11T14:40:45.200871 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25', 'ip': '127.0.0.1'}
+2026-02-11T14:40:50.228947 | LOGIN_FAILED | user=anonymous | extra={'username': 'uhbmn', 'ip': '127.0.0.1'}
+2026-02-11T14:41:00.057116 | LOGIN_FAILED | user=anonymous | extra={'username': 'yonashaftom255@gmail.com', 'ip': '127.0.0.1'}
+2026-02-11T14:41:05.893357 | LOGIN_FAILED | user=anonymous | extra={'username': 'iouoi', 'ip': '127.0.0.1'}
+2026-02-11T14:41:10.946836 | LOGIN_FAILED | user=anonymous | extra={'username': 'oij', 'ip': '127.0.0.1'}
+2026-02-11T14:41:53.022037 | LOGIN_FAILED | user=anonymous | extra={'username': 'yon25', 'ip': '127.0.0.1'}
+2026-02-11T14:41:58.692360 | LOGIN_FAILED | user=anonymous | extra={'username': 'iu', 'ip': '127.0.0.1'}
+2026-02-11T14:42:08.188656 | LOGIN_FAILED | user=anonymous | extra={'username': 'oi', 'ip': '127.0.0.1'}
+2026-02-11T14:42:15.859669 | LOGIN_FAILED | user=anonymous | extra={'username': 'yu', 'ip': '127.0.0.1'}
+2026-02-11T14:42:21.777070 | LOGIN_FAILED | user=anonymous | extra={'username': '67', 'ip': '127.0.0.1'}
+2026-02-11T14:43:12.718101 | LOGIN_FAILED | user=anonymous | extra={'username': '65t', 'ip': '127.0.0.1'}
+2026-02-11T14:43:18.284699 | LOGIN_FAILED | user=anonymous | extra={'username': '6543', 'ip': '127.0.0.1'}
+2026-02-11T14:43:23.596577 | LOGIN_FAILED | user=anonymous | extra={'username': '65', 'ip': '127.0.0.1'}
+2026-02-11T14:43:29.115708 | LOGIN_FAILED | user=anonymous | extra={'username': '54', 'ip': '127.0.0.1'}
+2026-02-11T14:43:34.367798 | LOGIN_FAILED | user=anonymous | extra={'username': '654', 'ip': '127.0.0.1'}
+2026-02-12T19:20:09.494740 | LOGIN_FAILED | user=anonymous | extra={'email': '', 'ip': '127.0.0.1'}
+2026-02-12T19:23:35.330493 | LOGIN_FAILED | user=anonymous | extra={'email': '', 'ip': '127.0.0.1'}
+2026-02-12T19:24:00.647439 | LOGIN_FAILED | user=anonymous | extra={'email': '', 'ip': '127.0.0.1'}
+2026-02-12T19:24:26.001231 | LOGIN_FAILED | user=anonymous | extra={'email': '', 'ip': '127.0.0.1'}
+2026-02-12T19:24:52.916931 | LOGIN_FAILED | user=anonymous | extra={'email': '', 'ip': '127.0.0.1'}
+2026-02-12T19:26:49.440481 | LOGIN_FAILED | user=anonymous | extra={'email': '', 'ip': '127.0.0.1'}
+2026-02-12T19:27:47.479298 | LOGIN_FAILED | user=anonymous | extra={'email': '', 'ip': '127.0.0.1'}
+2026-02-12T19:29:17.217592 | LOGIN_FAILED | user=anonymous | extra={'email': '', 'ip': '127.0.0.1'}
+2026-02-12T19:29:32.599312 | LOGIN_FAILED | user=anonymous | extra={'email': '', 'ip': '127.0.0.1'}
+2026-02-12T19:48:27.034899 | LOGIN_FAILED | user=yon12 | extra={'email': 'test@test.com', 'ip': '127.0.0.1'}
+2026-02-12T19:48:45.719056 | LOGIN_SUCCESS | user=yon12 | extra={'ip': '127.0.0.1'}
+2026-02-12T19:53:32.406055 | LOGOUT | user=anonymous | extra=None
+2026-02-12T19:53:40.234303 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}

@@ -13,10 +13,14 @@
                 <form method="POST" class="d-grid gap-2">
                 <label class="form-label">Username</label>
                 <input class="form-control" name="username" placeholder="Username" required />
+                <label class="form-label">Email</label>
+                <input class="form-control mb-2" name="email" type="email" placeholder="Email" required />
+
 
                 <label class="form-label mt-2">Password</label>
-                <input class="form-control" name="password" type="password" placeholder="Password" required />
-
+                <input class="form-control" name="password" type="password" placeholder="Password" required data-bs-toggle="tooltip" data-bs-placement="right"
+                title="Min 10 chars, max 72, include at least 1 letter and 1 number."
+                />
                 <button class="btn btn-dark mt-3" type="submit">Register</button>
                 </form>
 
