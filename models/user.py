@@ -12,7 +12,11 @@ class User(UserMixin, db.Model):
     is_admin = db.Column(db.Boolean, default=False)
     failed_login_count = db.Column(db.Integer, default=0)
     locked_until = db.Column(db.Integer, nullable=True)  # unix timestamp (seconds)
-    
+    totp_secret = db.Column(db.String(32), nullable=True)
+    totp_enabled = db.Column(db.Boolean, default=False)
+    twofa_verified = db.Column(db.Boolean, default=False)
+
+
 
     
     

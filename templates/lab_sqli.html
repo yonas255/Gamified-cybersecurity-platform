@@ -1,19 +1,34 @@
 {% extends "base.html"%}
 
 {% block title %} SQL Injection Lab{%endblock %}
-{% block header %}SQL Injection Lab ({{ Mode }}){%endblock %}
+{% block header %}SQL Injection Lab ({{ mode|capitalize }}){%endblock %}
 {% block subheader %}Vulnerable vs Secure {%endblock%}
 
 {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">Lab Mode: {{ mode|capitalize }}</h5>
+
+    {% if challenge_id %}
+    <a class="btn btn-outline-dark btn-sm"
+        href="/challenges/{{ challenge_id }}">
+        Back to Challenge →
+    </a>
+    {% endif %}
+</div>
+
 
 <div class="card shadow-sm">
     <div class="card-body">
 
-        <p>
-            Mode:
-            <a class="btn btn-danger btn-sm" href="/lab/sqli?mode=vuln">Vulnerable</a> |
-            <a class="btn btn-success btn-sm" href="/lab/sqli?mode=secure">Secure</a>
-        </p>
+        <a class="btn btn-danger btn-sm"
+            href="/lab/sqli?mode=vuln{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+        Vulnerable
+        </a> |
+        <a class="btn btn-success btn-sm"
+            href="/lab/sqli?mode=secure{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+            Secure
+        </a>
+
 
         <form method="POST" class="d-flex gap-2 mb-3">
             <input name="username" placeholder="Try username (guest/admin)" value="{{ username }}" required />
@@ -31,7 +46,9 @@
         {% endif %}
 
         {% if flag %}
-            <div=class"alert alert-success"><b>Flag:</b> {{ flag }}</p>
+            <div class="alert alert-success">
+                <b>Flag:</b> {{ flag }}
+            </div>
         {% endif %}
 
         <hr>
@@ -40,7 +57,7 @@
             {% if mode == "vuln" %}
                 User input is inserted directly into the SQL query, so the query logic can be changed (SQL injection).
             {% else %}
-                <p>User input is treated safely and cannot change the SQL query structure.
+                User input is treated safely and cannot change the SQL query structure.
             {% endif %}
         </p>
 
@@ -54,6 +71,8 @@
         {% else %}
         <img src="{{ url_for('static', filename='images/sqli_secure.png') }}" width="500">
         {% endif %}
+
+
     </div>
 </div>
 {% endblock %}

@@ -6,6 +6,8 @@ from models import db
 from models.user import User
 import time
 import re
+import pyotp
+from flask import session
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -109,7 +111,11 @@ def login():
 
 
             return redirect(url_for("auth.login"))
-
+        
+        # Enforce 2FA
+        if user.totp_enabled:
+            session["2fa_user_id"] = user.id
+            return redirect(url_for("auth.twofa_login"))
 
         login_user(user)
         user.failed_login_count = 0
@@ -117,9 +123,37 @@ def login():
         db.session.commit()
         audit("LOGIN_SUCCESS", user, {"ip": ip})
         flash("Login successful!")
-        return redirect(url_for("dashboard"))
+        if user.is_admin:
+            return redirect(url_for("admin.dashboard"))
+        else:
+            return redirect(url_for("dashboard"))
 
     return render_template("login.html")
+
+@auth_bp.route("/login/2fa", methods=["GET", "POST"])
+def twofa_login():
+    user_id = session.get("2fa_user_id")
+    if not user_id:
+        return redirect(url_for("auth.login"))
+
+    user = db.session.get(User, user_id)
+    if request.method == "POST":
+        code = request.form.get("code", "")
+        totp = pyotp.TOTP(user.totp_secret)
+
+        if totp.verify(code):
+            session.pop("2fa_user_id", None)
+            login_user(user)
+            audit("LOGIN_2FA_SUCCESS", user)
+            flash("Login successful.")
+            if user.is_admin:
+                return redirect(url_for("admin.dashboard"))
+            return redirect(url_for("dashboard"))
+
+        flash("Invalid 2FA code.")
+        audit("LOGIN_2FA_FAILED", user)
+
+    return render_template("login_2fa.html")
 
 @auth_bp.route("/logout")
 @login_required

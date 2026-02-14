@@ -1,65 +1,86 @@
-{% extends "base.html"%}
+{% extends "base.html" %}
 
-{% block title %} XSS Lab{%endblock %}
-{% block header %} XSS Lab ({{ Mode }}){%endblock %}
-{% block subheader %}Vulnerable vs Secure {%endblock%}
+{% block title %}XSS Lab{% endblock %}
+{% block header %}XSS Lab ({{ mode|capitalize }}){% endblock %}
+{% block subheader %}Vulnerable vs Secure{% endblock %}
 
 {% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">Lab Mode: {{ mode|capitalize }}</h5>
+
+    {% if challenge_id %}
+        <a class="btn btn-outline-dark btn-sm" href="/challenges/{{ challenge_id }}">
+            Back to Challenge →
+        </a>
+    {% endif %}
+</div>
 
 <div class="card shadow-sm">
     <div class="card-body">
 
-        <p>
-            Mode:
-            <a class="btn btn-danger btn-sm" href="/lab/xss?mode=vuln">Vulnerable</a> |
-            <a class="btn btn-success btn-sm" href="/lab/xss?mode=secure">Secure</a>
-        </p>
+    <p class="mb-3">
+        <a class="btn btn-danger btn-sm"
+            href="/lab/xss?mode=vuln&challenge_id={{ challenge_id }}">
+            Vulnerable
+        </a>
+        <span class="mx-1">|</span>
+        <a class="btn btn-success btn-sm"
+            href="/lab/xss?mode=secure&challenge_id={{ challenge_id }}">
+            Secure
+        </a>
+    </p>
 
-        <form method="POST" class="d-flex gap-2 mb-3">
-            <input name="text" placeholder="Enter text" value="{{ text }}" required />
-            <button class="btn btn-dark" type="submit">Submit</button>
-        </form>
+    <form method="POST" class="d-flex gap-2 mb-3">
+        <input class="form-control" name="text" placeholder="Enter text" value="{{ text }}" required />
+        <button class="btn btn-dark" type="submit">Submit</button>
+    </form>
 
-        {% if rendered is not none %}
-            <h3>Output</h3>
+    {% if rendered is not none %}
+        <h5>Output</h5>
 
-            {% if mode == "vuln" %}
+        {% if mode == "vuln" %}
             <!-- intentionally unsafe (demo) -->
-            <div>{{ rendered | safe }}</div>
-            {% else %}
+            <div class="border rounded p-2">{{ rendered | safe }}</div>
+        {% else %}
             <!-- safe (auto-escaped) -->
-            <div>{{ rendered }}</div>
-            {% endif %}
+            <div class="border rounded p-2">{{ rendered }}</div>
         {% endif %}
+    {% endif %}
 
-        {% if flag %}
-            <div class"alert alert-success"><b>Flag:</b> {{ flag }}</div>
-        {% endif %}
+    {% if flag %}
+        <div class="alert alert-success mt-3"><b>Flag:</b> {{ flag }}</div>
+    {% endif %}
 
-        <hr>
-        <h5>Why this worked</h5>
-        {% if mode == "vuln" %}
-        <p>User input is reflected without escaping, so the browser executes it as JavaScript (XSS).</p>
-        {% else %}
-        <p>User input is escaped, so scripts show as text and do not run.</p>
-        {% endif %}
+    <hr>
 
-        <h5>How it’s fixed</h5>
-        <p>Escape/encode output (and validate input) to prevent script execution.</p>
+    <h5>Why this worked</h5>
+    {% if mode == "vuln" %}
+        <p class="text-muted mb-2">
+            User input is reflected without escaping, so the browser executes it as JavaScript (XSS).
+        </p>
+    {% else %}
+        <p class="text-muted mb-2">
+            User input is escaped, so scripts show as text and do not run.
+        </p>
+    {% endif %}
 
-        <h5>Evidence</h5>
+    <h5>How it’s fixed</h5>
+    <p class="text-muted">Escape/encode output (and validate input) to prevent script execution.</p>
 
-        {% if mode == "vuln" %}
-
-
+    <h5>Evidence</h5>
+    {% if mode == "vuln" %}
         <div>
-        <img src="{{ url_for('static', filename='images/xss_vulnerable_.png') }}" width="500" style="display:block;">
-        <img src="{{ url_for('static', filename='images/xss_vulnerable.png') }}" width="500" style="display:block; margin-bottom:10px;">
+            <img src="{{ url_for('static', filename='images/xss_vulnerable_.png') }}"
+                width="500" style="display:block; margin-bottom:10px;">
+            <img src="{{ url_for('static', filename='images/xss_vulnerable.png') }}"
+                width="500" style="display:block;">
         </div>
-
-        {% else %}
+    {% else %}
         <img src="{{ url_for('static', filename='images/xss_secure.png') }}" width="500">
-        {% endif %}
+    {% endif %}
+
     </div>
 </div>
+
 {% endblock %}

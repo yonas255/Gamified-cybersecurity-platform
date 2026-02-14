@@ -10,43 +10,63 @@
   <div class="card-body">
     <p class="mb-3">{{ challenge.description }}</p>
 
-    <!-- Lab links -->
-    {% if challenge.lab_type != "none" %}
-    <div class="mb-3">
-      {% if challenge.lab_type == "sqli" %}
-        <a class="btn btn-danger btn-sm" href="/lab/sqli?mode=vuln">Open SQLi Lab (Vulnerable)</a>
-        <a class="btn btn-success btn-sm" href="/lab/sqli?mode=secure">View Secure Version</a>
-      
+    {# ---------------- Lab links ---------------- #}
+    {% if challenge.lab_type and challenge.lab_type != "none" %}
+      <div class="mb-3">
+
+        {% if challenge.lab_type == "sqli" %}
+          <a class="btn btn-danger btn-sm"
+              href="/lab/sqli?mode=vuln&challenge_id={{ challenge.id }}">Open SQLi Lab (Vulnerable)</a>
+          <a class="btn btn-success btn-sm"
+              href="/lab/sqli?mode=secure&challenge_id={{ challenge.id }}">View Secure Version</a>
+
         {% elif challenge.lab_type == "xss" %}
-        <a class="btn btn-danger btn-sm" href="/lab/xss?mode=vuln">Open XSS Lab (Vulnerable)</a>
-        <a class="btn btn-success btn-sm" href="/lab/xss?mode=secure">View Secure Version</a>
+          <a class="btn btn-danger btn-sm"
+              href="/lab/xss?mode=vuln&challenge_id={{ challenge.id }}">Open XSS Lab (Vulnerable)</a>
+          <a class="btn btn-success btn-sm"
+              href="/lab/xss?mode=secure&challenge_id={{ challenge.id }}">View Secure Version</a>
 
-      {% elif challenge.lab_type == "stored_xss" %}
-        <a class="btn btn-danger btn-sm" href="/lab/stored-xss?mode=vuln">Open Stored XSS Lab (Vulnerable)</a>
-        <a class="btn btn-success btn-sm" href="/lab/stored-xss?mode=secure">View Secure Version</a>
+        {% elif challenge.lab_type == "stored_xss" %}
+          <a class="btn btn-danger btn-sm"
+              href="/lab/stored-xss?mode=vuln&challenge_id={{ challenge.id }}">Open Stored XSS Lab (Vulnerable)</a>
+          <a class="btn btn-success btn-sm"
+              href="/lab/stored-xss?mode=secure&challenge_id={{ challenge.id }}">View Secure Version</a>
 
-      {% elif challenge.lab_type == "idor" %}
-        <a class="btn btn-danger btn-sm" href="/lab/idor?mode=vuln&uid=1">Open IDOR Lab (Vulnerable)</a>
-        <a class="btn btn-success btn-sm" href="/lab/idor?mode=secure&uid=1">View Secure Version</a>
-      
+        {% elif challenge.lab_type == "idor" %}
+          {# keep uid param AND challenge_id #}
+          <a class="btn btn-danger btn-sm"
+              href="/lab/idor?mode=vuln&uid=1&challenge_id={{ challenge.id }}">Open IDOR Lab (Vulnerable)</a>
+          <a class="btn btn-success btn-sm"
+              href="/lab/idor?mode=secure&uid=1&challenge_id={{ challenge.id }}">View Secure Version</a>
+
         {% elif challenge.lab_type == "csrf" %}
-        <a class="btn btn-danger btn-sm" href="/lab/csrf?mode=vuln">Open CSRF Lab (Vulnerable)</a>
-        <a class="btn btn-success btn-sm" href="/lab/csrf?mode=secure">View Secure Version</a>
-      
+          <a class="btn btn-danger btn-sm"
+              href="/lab/csrf?mode=vuln&challenge_id={{ challenge.id }}">Open CSRF Lab (Vulnerable)</a>
+          <a class="btn btn-success btn-sm"
+              href="/lab/csrf?mode=secure&challenge_id={{ challenge.id }}">View Secure Version</a>
+
         {% elif challenge.lab_type == "bac" %}
-        <a class="btn btn-danger btn-sm" href="/lab/bac?mode=vuln">Open BAC Lab (Vulnerable)</a>
-        <a class="btn btn-success btn-sm" href="/lab/bac?mode=secure">View Secure Version</a>
-      {% endif %}
-    </div>
-  {% endif %}
+          <a class="btn btn-danger btn-sm"
+              href="/lab/bac?mode=vuln&challenge_id={{ challenge.id }}">Open BAC Lab (Vulnerable)</a>
+          <a class="btn btn-success btn-sm"
+              href="/lab/bac?mode=secure&challenge_id={{ challenge.id }}">View Secure Version</a>
 
+        {% endif %}
 
+      </div>
+    {% endif %}
 
-    <!-- Flag submit -->
-    <form method="POST" class="d-flex gap-2">
-      <input class="form-control" name="flag" placeholder="Enter flag" required />
-      <button class="btn btn-dark" type="submit">Submit Flag</button>
-    </form>
+    {# ---------------- Flag submit ---------------- #}
+    {% if not current_user.is_admin %}
+      <form method="POST" class="d-flex gap-2">
+        <input class="form-control" name="flag" placeholder="Enter flag" required />
+        <button class="btn btn-dark" type="submit">Submit Flag</button>
+      </form>
+    {% else %}
+      <div class="alert alert-info mb-0">
+        Admin view — flag submission disabled.
+      </div>
+    {% endif %}
 
     <div class="mt-3">
       <a class="link-secondary" href="/challenges">← Back to Challenges</a>

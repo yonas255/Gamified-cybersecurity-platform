@@ -10,6 +10,7 @@ def _db_path():
     # reliable path to your sqlite db file
     return os.path.join(current_app.root_path, "instance", "app.db")
 
+
 def _ensure_lab_data():
     db_file = _db_path()
     os.makedirs(os.path.dirname(db_file), exist_ok=True)
@@ -40,6 +41,8 @@ def lab_sqli():
     _ensure_lab_data()
 
     mode = request.args.get("mode", "vuln")  # vuln or secure
+    challenge_id = request.args.get("challenge_id", type=int)
+
     username = ""
     result = None
     flag = None
@@ -51,11 +54,9 @@ def lab_sqli():
         cur = con.cursor()
 
         if mode == "vuln":
-            # intentionally unsafe (demo)
             query_used = f"SELECT username, role FROM lab_users WHERE username = '{username}'"
             cur.execute(query_used)
         else:
-            # safe fix
             query_used = "SELECT username, role FROM lab_users WHERE username = ?"
             cur.execute(query_used, (username,))
 
@@ -66,24 +67,39 @@ def lab_sqli():
             result = {"username": row[0], "role": row[1]}
             if row[1] == "admin":
                 flag = FLAGS["sqli"]
-        else:
-            result = None
 
-    return render_template("lab_sqli.html", mode=mode, username=username, result=result, flag=flag, query_used=query_used)
+    return render_template(
+        "lab_sqli.html",
+        mode=mode,
+        challenge_id=challenge_id,
+        username=username,
+        result=result,
+        flag=flag,
+        query_used=query_used
+    )
+
 
 @lab_bp.route("/lab/xss", methods=["GET", "POST"])
 @login_required
 def lab_xss():
-    mode = request.args.get("mode", "vuln")  # vuln or secure
+    mode = request.args.get("mode", "vuln")
+    challenge_id = request.args.get("challenge_id", type=int)
+
     text = ""
     rendered = None
     flag = None
 
     if request.method == "POST":
         text = request.form.get("text", "")
-        rendered = text  # reflected back (demo)
-        # simple “proof” flag when a typical script tag is present (demo only)
+        rendered = text
         if "<script" in text.lower():
             flag = FLAGS["xss"]
 
-    return render_template("lab_xss.html", mode=mode, text=text, rendered=rendered, flag=flag)
+    return render_template(
+        "lab_xss.html",
+        mode=mode,
+        challenge_id=challenge_id,
+        text=text,
+        rendered=rendered,
+        flag=flag
+    )

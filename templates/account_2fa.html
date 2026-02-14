@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Two-Factor Authentication{% endblock %}
+{% block header %}Two-Factor Authentication (2FA){% endblock %}
+{% block subheader %}Scan the QR code in an authenticator app{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        {% if enabled %}
+            <div class="alert alert-success">2FA is enabled on your account.</div>
+        {% else %}
+            <div class="alert alert-warning">2FA is not enabled yet. Scan then verify in the next step.</div>
+        {% endif %}
+
+        {% if enabled %}
+        <form method="POST" action="{{ url_for('account.disable_2fa') }}">
+            <button class="btn btn-danger">Disable 2FA</button>
+        </form>
+        {% endif %}
+
+
+        {% if not enabled %}
+        <div class="mb-3">
+            <img class="img-fluid border rounded" style="max-width: 280px;"
+                src="data:image/png;base64,{{ qr_b64 }}" alt="2FA QR Code">
+        </div>
+        {% endif %}
+
+
+        {% if not enabled %}
+        <form method="POST" action="{{ url_for('account.verify_2fa') }}" class="mt-3">
+            <label class="form-label">Enter 6-digit code</label>
+            <input class="form-control" name="code" placeholder="123456" required>
+            <button class="btn btn-dark mt-2">Verify & Enable 2FA</button>
+        </form>
+        {% endif %}
+
+
+        {% if not enabled %}
+        <div class="mb-3">
+            <label class="form-label">Manual secret (if QR scan fails)</label>
+            <input class="form-control" value="{{ secret }}" readonly>
+        </div>
+        {% endif %}
+
+
+        <p class="text-muted small mb-0">
+            Use Google Authenticator / Auth and add a new account by scanning the QR code.
+        </p>
+    </div>
+</div>
+{% endblock %}

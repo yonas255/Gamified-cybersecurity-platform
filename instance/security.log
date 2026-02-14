@@ -53,3 +53,13 @@
 2026-02-12T19:48:45.719056 | LOGIN_SUCCESS | user=yon12 | extra={'ip': '127.0.0.1'}
 2026-02-12T19:53:32.406055 | LOGOUT | user=anonymous | extra=None
 2026-02-12T19:53:40.234303 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}
+2026-02-13T15:58:26.887008 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-02-13T16:07:29.188260 | LOGOUT | user=anonymous | extra=None
+2026-02-13T16:08:16.166358 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-02-13T16:42:15.940252 | LOGOUT | user=anonymous | extra=None
+2026-02-13T16:42:38.096515 | LOGIN_SUCCESS | user=yon12 | extra={'ip': '127.0.0.1'}
+2026-02-13T22:36:16.884780 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}
+2026-02-13T22:50:50.925660 | LOGOUT | user=anonymous | extra=None
+2026-02-13T22:51:11.130036 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-02-13T23:02:08.407637 | LOGOUT | user=anonymous | extra=None
+2026-02-13T23:02:18.323522 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}

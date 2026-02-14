@@ -8,6 +8,6 @@ leaderboard_bp = Blueprint("leaderboard", __name__)
 @leaderboard_bp.route("/leaderboard")
 @login_required
 def leaderboard():
-    users = User.query.order_by(User.points.desc()).all()
+    users = User.query.filter_by(is_admin=False).order_by(User.points.desc()).all()
     return render_template("leaderboard.html", users=users)
 

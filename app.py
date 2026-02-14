@@ -1,3 +1,4 @@
+import os
 from flask import Flask, make_response, render_template
 from config import Config
 from flask_login import LoginManager
@@ -21,6 +22,7 @@ from routes.csrf_routes import csrf_bp
 from routes.bac_routes import bac_bp
 from routes.admin_routes import admin_bp
 from flask import request
+from routes.account_routes import account_bp
 
 login_manager=LoginManager()
 login_manager.login_view="auth.login"
@@ -40,7 +42,7 @@ def create_app():
     app.register_blueprint(csrf_bp)
     app.register_blueprint(bac_bp)
     app.register_blueprint(admin_bp)
-    
+    app.register_blueprint(account_bp)
     
     from flask import request
 
@@ -78,10 +80,44 @@ def create_app():
     
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        return db.session.get(User, int(user_id))
+
     
     with app.app_context():
         db.create_all()
+        admin_email = os.environ.get("BOOTSTRAP_ADMIN_EMAIL")
+        admin_password = os.environ.get("BOOTSTRAP_ADMIN_PASSWORD")
+
+        if admin_email and admin_password:
+            admin_email = admin_email.strip().lower()
+
+            
+            u = User.query.filter_by(email=admin_email).first()
+
+            
+            if not u:
+                u = User.query.filter_by(username="admin").first()
+
+            if u:
+                u.email = admin_email
+                u.is_admin = True
+                pw_hash = bcrypt.hashpw(admin_password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+                u.password_hash = pw_hash
+                db.session.commit()
+                print("✔ Bootstrap admin updated/assigned")
+            else:
+                pw_hash = bcrypt.hashpw(admin_password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+                admin_user = User(
+                    username="admin",
+                    email=admin_email,
+                    password_hash=pw_hash,
+                    is_admin=True
+                )
+                db.session.add(admin_user)
+                db.session.commit()
+                print("✔ Bootstrap admin created")
+        
+
         
     def admin_required(fn):
         @wraps(fn)
@@ -131,7 +167,8 @@ def create_app():
             description="Find the flag using the hint and submit it.",
             difficulty="Beginner",
             points=100,
-            flag_hash=flag_hash
+            flag_hash=flag_hash,
+            lab_type="sqli"
         )
         db.session.add(c)
         db.session.commit()
@@ -174,7 +211,8 @@ def create_app():
             description="Goal: trigger a reflected XSS in a safe demo and find the flag.",
             difficulty="Beginner",
             points=100,
-            flag_hash=flag_hash
+            flag_hash=flag_hash,
+            lab_type="xss"
         )
         db.session.add(c)
         db.session.commit()
@@ -197,7 +235,8 @@ def create_app():
             description="Access another user's data by changing an ID in the URL (safe simulation).",
             difficulty="Medium",
             points=150,
-            flag_hash=flag_hash
+            flag_hash=flag_hash,
+            lab_type="idor"
         )
         db.session.add(c)
         db.session.commit()
@@ -224,7 +263,8 @@ def create_app():
         description="Post a comment that runs as JavaScript when the page loads (safe demo). Then submit the flag.",
         difficulty="Medium",
         points=150,
-        flag_hash=flag_hash
+        flag_hash=flag_hash,
+        lab_type="stored_xss"
         )
         db.session.add(c)
         db.session.commit()
@@ -246,7 +286,8 @@ def create_app():
             description="Trigger an unauthorised state-changing request due to missing CSRF protection.",
             difficulty="Hard",
             points=200,
-            flag_hash=flag_hash
+            flag_hash=flag_hash,
+            lab_type="csrf"
         )
         db.session.add(c)
         db.session.commit()
@@ -268,7 +309,8 @@ def create_app():
             description="Access an admin-only page as a normal user (vulnerable), then see how it’s blocked (secure).",
             difficulty="Hard",
             points=200,
-            flag_hash=flag_hash
+            flag_hash=flag_hash,
+            lab_type="bac"
         )
         db.session.add(c)
         db.session.commit()
