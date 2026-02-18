@@ -63,3 +63,16 @@
 2026-02-13T22:51:11.130036 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
 2026-02-13T23:02:08.407637 | LOGOUT | user=anonymous | extra=None
 2026-02-13T23:02:18.323522 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}
+2026-02-14T01:48:00.411056 | LOGOUT | user=anonymous | extra=None
+2026-02-14T01:48:25.474827 | LOGIN_FAILED | user=admin | extra={'email': 'admin@example.com', 'ip': '127.0.0.1'}
+2026-02-14T01:52:18.442896 | LOGIN_FAILED | user=anonymous | extra={'email': 'admin1@example.com', 'ip': '127.0.0.1'}
+2026-02-14T01:52:51.116585 | LOGIN_FAILED | user=admin | extra={'email': 'admin@example.com', 'ip': '127.0.0.1'}
+2026-02-14T01:53:05.987834 | LOGIN_FAILED | user=anonymous | extra={'email': 'admin1@example.com', 'ip': '127.0.0.1'}
+2026-02-14T01:54:07.292724 | LOGIN_FAILED | user=anonymous | extra={'email': 'admin1@example.co', 'ip': '127.0.0.1'}
+2026-02-14T01:55:47.571289 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-02-17T16:27:11.699934 | ADMIN_CREATE_CHALLENGE | user=admin | extra={'title': 'Admin Bypass (Simulation)'}
+2026-02-18T15:35:48.786174 | LOGOUT | user=anonymous | extra=None
+2026-02-18T15:36:17.035890 | LOGIN_FAILED | user=yon25 | extra={'email': 'test@test.com', 'ip': '127.0.0.1'}
+2026-02-18T15:36:41.912386 | LOGIN_FAILED | user=yon25 | extra={'email': 'test@test.com', 'ip': '127.0.0.1'}
+2026-02-18T15:37:30.614484 | LOGIN_FAILED | user=anonymous | extra={'email': 'test12@test.com', 'ip': '127.0.0.1'}
+2026-02-18T15:38:20.168221 | LOGIN_SUCCESS | user=yon | extra={'ip': '127.0.0.1'}

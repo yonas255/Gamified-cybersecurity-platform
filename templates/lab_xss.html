@@ -2,7 +2,7 @@
 
 {% block title %}XSS Lab{% endblock %}
 {% block header %}XSS Lab ({{ mode|capitalize }}){% endblock %}
-{% block subheader %}Vulnerable vs Secure{% endblock %}
+{% block subheader %}Reflected XSS · Vulnerable vs Secure{% endblock %}
 
 {% block content %}
 
@@ -19,68 +19,116 @@
 <div class="card shadow-sm">
     <div class="card-body">
 
-    <p class="mb-3">
-        <a class="btn btn-danger btn-sm"
-            href="/lab/xss?mode=vuln&challenge_id={{ challenge_id }}">
-            Vulnerable
-        </a>
-        <span class="mx-1">|</span>
-        <a class="btn btn-success btn-sm"
-            href="/lab/xss?mode=secure&challenge_id={{ challenge_id }}">
-            Secure
-        </a>
-    </p>
+        <!-- Mode Switch -->
+        <p class="mb-3">
+            <a class="btn btn-danger btn-sm"
+                href="/lab/xss?mode=vuln{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+                    Vulnerable
+            </a>
+            <span class="mx-1">|</span>
+            <a class="btn btn-success btn-sm"
+                href="/lab/xss?mode=secure{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+                    Secure
+            </a>
+        </p>
 
-    <form method="POST" class="d-flex gap-2 mb-3">
-        <input class="form-control" name="text" placeholder="Enter text" value="{{ text }}" required />
-        <button class="btn btn-dark" type="submit">Submit</button>
-    </form>
+        <!-- Input -->
+        <form method="POST" class="d-flex gap-2 mb-3">
+            <input class="form-control"
+                    name="text"
+                    placeholder="Enter text"
+                    value="{{ text }}"
+                    required />
+            <button class="btn btn-dark" type="submit">Submit</button>
+        </form>
 
-    {% if rendered is not none %}
-        <h5>Output</h5>
+        <!-- Output -->
+        {% if rendered is not none %}
+            <h5>🖥 Output</h5>
 
-        {% if mode == "vuln" %}
-            <!-- intentionally unsafe (demo) -->
-            <div class="border rounded p-2">{{ rendered | safe }}</div>
-        {% else %}
-            <!-- safe (auto-escaped) -->
-            <div class="border rounded p-2">{{ rendered }}</div>
+            {% if mode == "vuln" %}
+                <!-- intentionally unsafe (demo) -->
+                <div class="border rounded p-2">{{ rendered | safe }}</div>
+            {% else %}
+                <!-- safe (auto-escaped) -->
+                <div class="border rounded p-2">{{ rendered }}</div>
+            {% endif %}
+
+            <p class="small text-muted mt-2">
+                {% if mode == "vuln" %}
+                    Vulnerable mode renders your input as HTML/JS (unsafe).
+                {% else %}
+                    Secure mode escapes your input, so it appears as text (safe).
+                {% endif %}
+            </p>
         {% endif %}
-    {% endif %}
 
-    {% if flag %}
-        <div class="alert alert-success mt-3"><b>Flag:</b> {{ flag }}</div>
-    {% endif %}
+        <!-- 🎉 Flag -->
+        {% if flag %}
+            <div class="alert alert-success mt-3">
+                <div class="fw-bold">🎉 Success! Reflected XSS executed.</div>
+                <div class="small">Copy the flag and submit it on the challenge page.</div>
 
-    <hr>
+                <hr class="my-2">
 
-    <h5>Why this worked</h5>
-    {% if mode == "vuln" %}
-        <p class="text-muted mb-2">
-            User input is reflected without escaping, so the browser executes it as JavaScript (XSS).
-        </p>
-    {% else %}
-        <p class="text-muted mb-2">
-            User input is escaped, so scripts show as text and do not run.
-        </p>
-    {% endif %}
+                <div class="fw-bold">🏁 Flag</div>
+                <div class="d-flex gap-2 align-items-center mt-1">
+                    <code class="p-2 bg-light rounded flex-grow-1" id="flagText">{{ flag }}</code>
+                    <button class="btn btn-outline-dark btn-sm" type="button" onclick="copyFlag()">Copy</button>
+                </div>
+            </div>
+        {% endif %}
 
-    <h5>How it’s fixed</h5>
-    <p class="text-muted">Escape/encode output (and validate input) to prevent script execution.</p>
+        <hr>
 
-    <h5>Evidence</h5>
-    {% if mode == "vuln" %}
-        <div>
-            <img src="{{ url_for('static', filename='images/xss_vulnerable_.png') }}"
-                width="500" style="display:block; margin-bottom:10px;">
-            <img src="{{ url_for('static', filename='images/xss_vulnerable.png') }}"
-                width="500" style="display:block;">
+        <!-- Explanation -->
+        <h5>🧠 Why this worked</h5>
+        {% if mode == "vuln" %}
+            <div class="text-muted">
+                <p>
+                    In vulnerable mode, the application reflects your input directly into the page without escaping.
+                    The browser treats it as real HTML/JavaScript and executes it.
+                </p>
+
+                <p>Example payload:</p>
+                <pre class="bg-light p-2 rounded">&lt;script&gt;alert('XSS')&lt;/script&gt;</pre>
+
+                <p>
+                    This is called <strong>Reflected XSS</strong> because the payload is reflected immediately in the response.
+                </p>
+            </div>
+        {% else %}
+            <div class="text-muted">
+                <p>
+                    In secure mode, the application escapes your input.
+                    Characters like <code>&lt;</code> and <code>&gt;</code> are treated as text instead of HTML.
+                </p>
+                <p>
+                    So scripts are shown on screen but not executed — preventing XSS.
+                </p>
+            </div>
+        {% endif %}
+
+        <h5 class="mt-3">🛡 How it’s fixed</h5>
+        <div class="text-muted">
+            <ul>
+                <li>✔ Escape/encode output before rendering</li>
+                <li>✔ Validate and sanitize input where appropriate</li>
+                <li>✔ Use security headers like Content Security Policy (CSP)</li>
+            </ul>
         </div>
-    {% else %}
-        <img src="{{ url_for('static', filename='images/xss_secure.png') }}" width="500">
-    {% endif %}
 
     </div>
 </div>
+
+<script>
+    function copyFlag() {
+        const el = document.getElementById("flagText");
+        if (!el) return;
+        navigator.clipboard.writeText(el.innerText).then(() => {
+            alert("Flag copied ✅");
+        });
+    }
+</script>
 
 {% endblock %}

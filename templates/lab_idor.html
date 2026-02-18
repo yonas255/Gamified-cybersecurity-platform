@@ -1,40 +1,104 @@
-{% extends "base.html"%}
+{% extends "base.html" %}
 
-{% block title %} IDOR Lab {%endblock %}
-{% block header %} IDOR Lab  ({{ Mode }}){%endblock %}
-{% block subheader %}Vulnerable vs Secure {%endblock%}
+{% block title %}IDOR Lab{% endblock %}
+{% block header %}IDOR Lab ({{ mode|capitalize }}){% endblock %}
+{% block subheader %}Vulnerable vs Secure{% endblock %}
 
 {% block content %}
 
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <a class="btn btn-danger btn-sm"
+            href="/lab/idor?mode=vuln&uid={{ uid }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+            Vulnerable
+        </a>
+        <a class="btn btn-success btn-sm"
+            href="/lab/idor?mode=secure&uid={{ uid }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+            Secure
+        </a>
+    </div>
+
+    {% if challenge_id %}
+        <a class="btn btn-outline-dark btn-sm" href="/challenges/{{ challenge_id }}">
+        Back to Challenge →
+        </a>
+    {% endif %}
+</div>
+
 <div class="card shadow-sm">
     <div class="card-body">
-        <p>
-            Mode:
-            <a class="btn btn-danger btn-sm" href="/lab/idor?mode=vuln&uid=2">Vulnerable</a> |
-            <a class="btn btn-success btn-sm" href="/lab/idor?mode=secure&uid=2">Secure</a>
-        </p>
 
-        {% if user %}
-            <p><b>Viewing user:</b> {{ user.username }} (id={{ user.id }})</p>
+        <div class="alert alert-secondary">
+            <div><b>Your user id:</b> {{ current_user.id }}</div>
+            {% if current_user.is_admin %}
+                <div class="text-muted small mt-1">
+                    ✅ You are admin, so Secure mode allows viewing other users.
+                </div>
+            {% endif %}
+            <div><b>Viewing uid:</b> {{ uid }}</div>
+            <div class="text-muted small">
+                IDOR happens when you can access other users’ data by changing an ID in the URL.
+            </div>
+        </div>
+
+        {% if denied or not target_user %}
+            <div class="alert alert-danger">
+                <b>Access denied.</b>
+                <div class="small">Secure mode checks that you are allowed to access this user.</div>
+            </div>
         {% else %}
-            <p>No access.</p>
+        <h5>👤 User Data</h5>
+        <div class="border rounded p-2">
+            <div><b>Username:</b> {{ target_user.username }}</div>
+
+            {% if target_user.email is defined %}
+            <div><b>Email:</b> {{ target_user.email }}</div>
+            {% endif %}
+
+            {% if target_user.role is defined %}
+            <div><b>Role:</b> {{ target_user.role }}</div>
+            {% endif %}
+        </div>
         {% endif %}
 
         {% if flag %}
-            <div class="alert alert-success"><b>Flag:</b> {{ flag }}</p>
+            <div class="alert alert-success mt-3">
+                <div class="fw-bold">🎉 Success! You accessed another user’s data.</div>
+                <div class="small">Copy the flag and submit it on the challenge page.</div>
+                <hr class="my-2">
+                <div class="d-flex gap-2 align-items-center">
+                <code class="p-2 bg-light rounded flex-grow-1" id="flagText">{{ flag }}</code>
+                <button class="btn btn-outline-dark btn-sm" type="button" onclick="copyFlag()">Copy</button>
+                </div>
+            </div>
         {% endif %}
 
         <hr>
-        <h3>Why this worked</h3>
-        <p class="text-muted">
-            {% if mode == "vuln" %}
-            The application trusts the ID in the URL and does not verify ownership.
+
+        <h5>🧠 Why this worked</h5>
+        {% if mode == "vuln" %}
+            <p class="text-muted">
+                The app trusts the <code>uid</code> value from the URL and returns user data without checking if you own that account.
+            </p>
             {% else %}
-            Access is restricted to the authenticated user only.
-            {% endif %}
+            <p class="text-muted">
+                The app enforces authorization: you can only access your own account (unless you're an admin).
+            </p>
+        {% endif %}
+
+        <h5 class="mt-3">🛡 How it’s fixed</h5>
+        <p class="text-muted">
+            Always enforce authorization on the server. Never trust IDs from the URL without checking access permissions.
         </p>
-        <h3>How it’s fixed</h3>
-        <p class="text-muted">Always enforce authorization checks on server-side resources.</p>
+
     </div>
 </div>
+
+<script>
+function copyFlag() {
+    const el = document.getElementById("flagText");
+    if (!el) return;
+    navigator.clipboard.writeText(el.innerText).then(() => alert("Flag copied ✅"));
+}
+</script>
 {% endblock %}

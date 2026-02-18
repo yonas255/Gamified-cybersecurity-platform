@@ -1,10 +1,12 @@
 {% extends "base.html"%}
 
-{% block title %} SQL Injection Lab{%endblock %}
-{% block header %}SQL Injection Lab ({{ mode|capitalize }}){%endblock %}
-{% block subheader %}Vulnerable vs Secure {%endblock%}
+{% block title %}SQL Injection Lab{% endblock %}
+{% block header %}{{ challenge_title }}{% endblock %}
+{% block subheader %}SQL Injection Lab · {{ mode|capitalize }} Mode{% endblock %}
+
 
 {% block content %}
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="mb-0">Lab Mode: {{ mode|capitalize }}</h5>
 
@@ -16,63 +18,217 @@
     {% endif %}
 </div>
 
+<!-- 🎯 Mission Banner -->
+<div class="alert alert-info d-flex justify-content-between align-items-center">
+    <div>
+        <b>🎯 Mission:</b> Make the query return a user in <b>Vulnerable</b> mode to reveal the flag.
+        <div class="small text-muted">Tip: Try payloads in the username field.</div>
+    </div>
+
+    <span class="badge text-bg-secondary">
+        {% if flag %}
+            ✅ Completed
+        {% elif query_used %}
+            🔍 Attempted
+        {% else %}
+            🟡 Not started
+        {% endif %}
+    </span>
+</div>
 
 <div class="card shadow-sm">
     <div class="card-body">
 
+        <!-- Mode Switch Buttons -->
         <a class="btn btn-danger btn-sm"
             href="/lab/sqli?mode=vuln{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
-        Vulnerable
+            Vulnerable
         </a> |
         <a class="btn btn-success btn-sm"
             href="/lab/sqli?mode=secure{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
             Secure
         </a>
 
-
-        <form method="POST" class="d-flex gap-2 mb-3">
-            <input name="username" placeholder="Try username (guest/admin)" value="{{ username }}" required />
+        <!-- Input Form -->
+        <form method="POST" class="d-flex gap-2 mb-3 mt-3">
+            <input class="form-control"
+                    name="username"
+                    placeholder="Try username (guest/admin)"
+                    value="{{ username }}"
+                    required />
             <button class="btn btn-dark" type="submit">Search</button>
         </form>
 
+        <!-- Query Evidence -->
         {% if query_used %}
             <p><b>Query used:</b> <code>{{ query_used }}</code></p>
         {% endif %}
 
-        {% if result %}
-            <p>Found user: <b>{{ result.username }}</b> (role: <b>{{ result.role }}</b>)</p>
-        {% else %}
-            <p>No match.</p>
+        <!-- Result -->
+        {% if query_used %}
+            {% if result %}
+                <p>Found user: <b>{{ result.username }}</b> (role: <b>{{ result.role }}</b>)</p>
+            {% else %}
+                <p>No match.</p>
+            {% endif %}
         {% endif %}
 
+        <!-- 🎉 Success Section -->
         {% if flag %}
             <div class="alert alert-success">
-                <b>Flag:</b> {{ flag }}
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="fw-bold">🎉 Success! You triggered SQL injection.</div>
+                        <div class="small">Copy the flag and submit it on the challenge page.</div>
+                    </div>
+                    <span class="badge text-bg-success">+{{ points }} pts</span>
+                </div>
+
+                <hr class="my-2">
+
+                <div class="fw-bold">🏁 Flag</div>
+                <div class="d-flex gap-2 align-items-center mt-1">
+                    <code class="p-2 bg-light rounded flex-grow-1" id="flagText">{{ flag }}</code>
+                    <button class="btn btn-outline-dark btn-sm" type="button" onclick="copyFlag()">Copy</button>
+                </div>
+
+                <div class="small text-muted mt-2">
+                    Then click “Back to Challenge →” and paste it into the flag box.
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- SQL Error (Evidence) -->
+        {% if error %}
+            <div class="alert alert-warning">
+                <b>SQL Error (this is evidence):</b><br>
+                {{ error }}
             </div>
         {% endif %}
 
         <hr>
-        <h5>Why this worked</h5>
-        <p class="text-muted">
-            {% if mode == "vuln" %}
-                User input is inserted directly into the SQL query, so the query logic can be changed (SQL injection).
-            {% else %}
-                User input is treated safely and cannot change the SQL query structure.
-            {% endif %}
-        </p>
 
-        <h5>How it’s fixed</h5>
-        <p class="text-muted">Use parameterized queries so input is handled as data, not executable SQL.</p>
-
-        <h5>Evidence</h5>
+        <!-- Explanation -->
+        <h5>🧠 Why this worked</h5>
 
         {% if mode == "vuln" %}
-        <img src="{{ url_for('static', filename='images/sqli_vulnerable.png') }}" width="500">
+        <div class="text-muted">
+
+            <p>
+                In vulnerable mode, user input is directly inserted into the SQL query.
+            </p>
+
+            <p>The query structure looks like this:</p>
+
+            <pre class="bg-light p-2 rounded">
+        SELECT username, role FROM lab_users WHERE username = 'USER_INPUT'
+            </pre>
+
+            <p>
+                When you entered a payload like:
+            </p>
+
+            <pre class="bg-light p-2 rounded">
+        admin' --
+            </pre>
+
+            <p>
+                The input closed the original string and used <code>--</code> 
+                to ignore the rest of the statement.
+                This allowed the database to return unintended results.
+            </p>
+
+            {% if lab_variant == "sqli" %}
+            <p>Another common beginner payload is:</p>
+
+            <pre class="bg-light p-2 rounded">
+        ' OR '1'='1
+            </pre>
+
+            <p>
+                This makes the WHERE condition always TRUE,
+                so the database returns a user even if the input is incorrect.
+            </p>
+            {% endif %}
+
+            <p>
+                This is called <strong>SQL Injection</strong> —
+                when user input changes the logic of a database query.
+            </p>
+
+            {% if lab_variant == "sqli_admin" %}
+            <p>
+                In this challenge, the goal is more specific:
+                you must manipulate the query so that it returns
+                the <strong>admin</strong> user.
+            </p>
+
+            <p>
+                This simulates a real-world <strong>privilege escalation</strong>,
+                where an attacker bypasses authentication to gain administrative access.
+            </p>
+            {% endif %}
+
+        </div>
         {% else %}
-        <img src="{{ url_for('static', filename='images/sqli_secure.png') }}" width="500">
+        <div class="text-muted">
+
+            <p>
+                In secure mode, the query uses a placeholder:
+            </p>
+
+            <pre class="bg-light p-2 rounded">
+        SELECT username, role FROM lab_users WHERE username = ?
+            </pre>
+
+            <p>
+                The user input is treated strictly as data, not executable SQL.
+            </p>
+
+            <p>
+                Even if special characters or SQL keywords are entered,
+                they cannot modify the structure of the query.
+            </p>
+
+            <p>
+                Because the SQL structure is fixed,
+                SQL Injection attacks are prevented.
+            </p>
+
+        </div>
         {% endif %}
 
+        <h5 class="mt-3">🛡 How it’s fixed</h5>
 
+        <div class="text-muted">
+            <p>
+                Secure applications use <strong>parameterized queries</strong>.
+            </p>
+
+            <p>Parameterized queries separate:</p>
+
+            <ul>
+                <li> SQL structure</li>
+                <li> User input data</li>
+            </ul>
+
+            <p>
+                Since user input is handled only as data,
+                it cannot change the logic of the SQL statement.
+            </p>
+        </div>
     </div>
 </div>
+
+<!-- Copy Flag Script -->
+<script>
+    function copyFlag() {
+        const el = document.getElementById("flagText");
+        if (!el) return;
+        navigator.clipboard.writeText(el.innerText).then(() => {
+            alert("Flag copied ✅");
+        });
+    }
+</script>
+
 {% endblock %}

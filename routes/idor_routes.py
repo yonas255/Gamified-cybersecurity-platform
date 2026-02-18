@@ -9,20 +9,35 @@ idor_bp = Blueprint("idor", __name__)
 @login_required
 def lab_idor():
     mode = request.args.get("mode", "vuln")
-    uid = request.args.get("uid", type=int)
+    if mode not in ("vuln", "secure"):
+        mode = "vuln"
 
-    user = None
+    uid = request.args.get("uid", type=int) or current_user.id
+    challenge_id = request.args.get("challenge_id", type=int)
+
+    target_user = User.query.get(uid)
+
+    denied = False
     flag = None
 
-    if mode == "vuln":
-        # ❌ vulnerable: no ownership check
-        user = User.query.get(uid)
-        if user and user.id != current_user.id:
-            flag = FLAGS["idor"]
+    if not target_user:
+        denied = True
 
-    else:
-        # ✅ secure: enforce ownership
-        if uid == current_user.id:
-            user = current_user
+    #  secure: block before sending data
+    if mode == "secure" and uid != current_user.id and not getattr(current_user, "is_admin", False):
+        denied = True
+        target_user = None  #  IMPORTANT: prevent leaking data to template
 
-    return render_template("lab_idor.html", mode=mode, user=user, flag=flag)
+    #  vuln: flag only when accessing other user
+    if mode == "vuln" and target_user and uid != current_user.id:
+        flag = FLAGS["idor"]
+
+    return render_template(
+        "lab_idor.html",
+        mode=mode,
+        challenge_id=challenge_id,
+        uid=uid,
+        target_user=target_user,
+        denied=denied,
+        flag=flag
+    )

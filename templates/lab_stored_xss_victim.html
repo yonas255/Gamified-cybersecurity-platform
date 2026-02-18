@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Victim View{% endblock %}
+{% block header %}Victim View{% endblock %}
+{% block subheader %}Stored XSS Simulation · {{ mode|capitalize }} Mode{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <a class="btn btn-outline-dark btn-sm"
+        href="/lab/stored-xss?mode={{ mode }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+        ← Back to Attacker View
+    </a>
+
+    {% if challenge_id %}
+        <a class="btn btn-outline-dark btn-sm"
+            href="/challenges/{{ challenge_id }}">
+            Back to Challenge →
+        </a>
+    {% endif %}
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <div class="alert alert-secondary">
+            👤 <b>Victim View:</b> This simulates another user loading the page.
+        </div>
+
+        <h5>💬 Comments</h5>
+
+        {% if comments and comments|length > 0 %}
+            {% for c in comments %}
+                {% if mode == "vuln" %}
+                    <div class="border rounded p-2 mb-2">{{ c | safe }}</div>
+                {% else %}
+                <div class="border rounded p-2 mb-2">{{ c }}</div>
+            {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="text-muted">No comments yet.</div>
+        {% endif %}
+
+        {% if flag %}
+            <div class="alert alert-success mt-3">
+                🎉 <b>Stored XSS executed on victim!</b>
+
+                <hr>
+
+                <code id="flagText">{{ flag }}</code>
+                <button class="btn btn-outline-dark btn-sm" onclick="copyFlag()">Copy</button>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<script>
+function copyFlag() {
+    const el = document.getElementById("flagText");
+    if (!el) return;
+    navigator.clipboard.writeText(el.innerText).then(() => {
+        alert("Flag copied ✅");
+    });
+}
+</script>
+
+{% endblock %}

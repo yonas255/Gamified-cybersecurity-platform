@@ -4,7 +4,6 @@ from decorators import admin_required
 import bcrypt
 from flask import request, redirect, url_for, flash
 from models import db
-from models import challenge
 from models.challenge import Challenge
 from audit import audit
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
@@ -25,23 +24,29 @@ def create_challenge():
         difficulty = request.form.get("difficulty", "Beginner").strip()
         lab_type = request.form.get("lab_type", "none").strip()
         points = int(request.form.get("points", "100"))
-        flag = request.form.get("flag", "").strip()
 
-        if not title or not description or not flag:
+        flag_plain = request.form.get("flag", "").strip()
+
+        # ✅ Validate first
+        if not title or not description or not flag_plain:
             flash("Title, description, and flag are required.")
             return redirect(url_for("admin.create_challenge"))
 
-        flag_hash = bcrypt.hashpw(flag.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+        # ✅ Hash the flag before saving
+        flag_hash = bcrypt.hashpw(
+            flag_plain.encode("utf-8"),
+            bcrypt.gensalt()
+        ).decode("utf-8")
 
         c = Challenge(
             title=title,
-            description=description,
             difficulty=difficulty,
             points=points,
-            flag_hash=flag_hash,
-            lab_type=lab_type
-
+            lab_type=lab_type,
+            description=description,
+            flag_hash=flag_hash
         )
+
         db.session.add(c)
         db.session.commit()
 
@@ -50,6 +55,7 @@ def create_challenge():
         return redirect(url_for("admin.dashboard"))
 
     return render_template("admin/challenge_create.html")
+
 
 @admin_bp.route("/challenges")
 @login_required

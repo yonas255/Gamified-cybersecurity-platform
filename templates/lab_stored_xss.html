@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Stored XSS Lab{% endblock %}
+{% block header %}Stored XSS Lab{% endblock %}
+{% block subheader %}Attacker View · {{ mode|capitalize }} Mode{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex gap-2 flex-wrap">
+
+        <a class="btn btn-danger btn-sm"
+            href="/lab/stored-xss?mode=vuln{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+            Vulnerable
+        </a>
+
+        <a class="btn btn-success btn-sm"
+            href="/lab/stored-xss?mode=secure{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+            Secure
+        </a>
+
+        <form method="POST"
+                action="/lab/stored-xss/clear?mode={{ mode }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}"
+                class="d-inline">
+            <button class="btn btn-outline-danger btn-sm" type="submit">Clear</button>
+        </form>
+
+        <a class="btn btn-outline-primary btn-sm"
+            href="/lab/stored-xss/victim?mode={{ mode }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+            👤 View as Victim
+        </a>
+
+    </div>
+
+    {% if challenge_id %}
+        <a class="btn btn-outline-dark btn-sm" href="/challenges/{{ challenge_id }}">
+            Back to Challenge →
+        </a>
+    {% endif %}
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <div class="alert alert-secondary">
+        🧪 <b>Attacker View:</b> Post a comment. Then click
+        <b>View as Victim</b> to see if it executes.
+        </div>
+
+        <form method="POST" class="d-flex gap-2 mb-3">
+        <input class="form-control" name="comment" placeholder="Write a comment" required>
+        <button class="btn btn-dark" type="submit">Post</button>
+        </form>
+
+        <h5>💬 Stored Comments</h5>
+
+        {% if comments and comments|length > 0 %}
+            {% for c in comments %}
+                <div class="border rounded p-2 mb-2">{{ c }}</div>
+            {% endfor %}
+
+            {% else %}
+            <div class="text-muted">No comments yet.</div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

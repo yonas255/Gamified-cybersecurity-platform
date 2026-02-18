@@ -10,6 +10,194 @@
   <div class="card-body">
     <p class="mb-3">{{ challenge.description }}</p>
 
+    {% if challenge.lab_type == "sqli" %}
+      <div class="alert alert-secondary mb-3">
+        <div class="fw-bold mb-2">🎯 Goal</div>
+        <div>Log in as <b>admin</b> in the vulnerable lab and reveal the <b>flag</b>.</div>
+
+        <hr class="my-2">
+
+        <div class="fw-bold mb-2">✅ Steps</div>
+        <ol class="mb-2">
+          <li>Click <b>Open SQLi Lab (Vulnerable)</b></li>
+          <li>Try a normal login (see it fail)</li>
+          <li>Try a SQL injection input in the username</li>
+          <li>When the flag appears, copy it</li>
+          <li>Come back here and submit the flag</li>
+        </ol>
+
+        <div class="fw-bold mb-2">💡 Hint 1</div>
+        <div>Try special characters in the username field (like quotes).</div>
+
+        <details class="mt-2 mb-2">
+          <summary class="fw-bold">Hint 2 (click)</summary>
+          <div class="mt-2">In SQL, an <b>OR</b> condition can make a login true even if the password is wrong.</div>
+        </details>
+
+        <details>
+          <summary class="fw-bold">Hint 3 (click)</summary>
+          <div class="mt-2"><code>' OR '1'='1</code></div>
+          <div class="mt-2"><code>  admin' --</code></div>
+        </details>
+      </div>
+    {% endif %}
+
+    {% if challenge.lab_type == "xss" %}
+      <div class="alert alert-secondary mb-3">
+        <div class="fw-bold mb-2">🎯 Goal</div>
+        <div>Trigger a <b>Reflected XSS</b> in the vulnerable lab and reveal the <b>flag</b>.</div>
+
+        <hr class="my-2">
+
+        <div class="fw-bold mb-2">✅ Steps</div>
+        <ol class="mb-2">
+          <li>Click <b>Open XSS Lab (Vulnerable)</b></li>
+          <li>Try normal text first (it should just display)</li>
+          <li>Try an XSS payload in the input box</li>
+          <li>If an alert pops up / script runs, the flag will appear</li>
+          <li>Copy the flag and submit it here</li>
+        </ol>
+
+        <div class="fw-bold mb-2">💡 Hint 1</div>
+        <div>Try entering HTML/JavaScript that the browser might execute.</div>
+
+        <details class="mt-2 mb-2">
+          <summary class="fw-bold">Hint 2 (click)</summary>
+          <div class="mt-2">
+            Try: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>
+          </div>
+        </details>
+
+        <details>
+          <summary class="fw-bold">Hint 3 (click)</summary>
+          <div class="mt-2">
+            If scripts are blocked, try an HTML event:
+            <code>&lt;img src=x onerror=alert('XSS')&gt;</code>
+          </div>
+        </details>
+      </div>
+    {% endif %}
+
+    {% if challenge.lab_type == "stored_xss" %}
+      <div class="alert alert-secondary mb-3">
+        <div class="fw-bold mb-2">🎯 Goal</div>
+        <div>Store a malicious comment in the vulnerable lab so it executes when the page reloads, then reveal the <b>flag</b>.</div>
+
+        <hr class="my-2">
+
+        <div class="fw-bold mb-2">✅ Steps</div>
+        <ol class="mb-2">
+          <li>Click <b>Open Stored XSS Lab (Vulnerable)</b></li>
+          <li>Post a normal comment first (see it appear)</li>
+          <li>Post a script payload as a comment</li>
+          <li>When the comment is displayed and runs, the <b>flag</b> will appear</li>
+          <li>Copy the flag and submit it here</li>
+          <li>Open <b>Secure Version</b> and try the same payload again (it should not execute)</li>
+        </ol>
+
+        <div class="fw-bold mb-2">💡 Hint 1</div>
+        <div>Stored XSS means the payload is saved and shown later to anyone viewing the page.</div>
+
+        <details class="mt-2 mb-2">
+          <summary class="fw-bold">Hint 2 (click)</summary>
+          <div class="mt-2">
+            Try: <code>&lt;script&gt;alert('stored xss')&lt;/script&gt;</code>
+          </div>
+        </details>
+
+        <details>
+          <summary class="fw-bold">Hint 3 (click)</summary>
+          <div class="mt-2">
+            If script tags are filtered, try an HTML event:
+            <code>&lt;img src=x onerror=alert('stored')&gt;</code>
+          </div>
+        </details>
+      </div>
+    {% endif %}
+
+    
+    {% if challenge.lab_type == "idor" %}
+      <div class="alert alert-secondary mb-3">
+        <div class="fw-bold mb-2">🎯 Goal</div>
+        <div>
+          In the <b>Vulnerable</b> lab, access another user’s data by changing the <code>uid</code> in the URL and reveal the <b>flag</b>.
+        </div>
+
+        <hr class="my-2">
+
+        <div class="fw-bold mb-2">✅ Steps</div>
+        <ol class="mb-2">
+          <li>Click <b>Open IDOR Lab (Vulnerable)</b></li>
+          <li>Look at the URL — you will see <code>uid=</code></li>
+          <li>Change <code>uid</code> to a different number (example: 2 or 3)</li>
+          <li>If you can see another user’s data, the <b>flag</b> will appear</li>
+          <li>Open <b>Secure Version</b> and try again — it should say <b>Access denied</b></li>
+          <li>Copy the flag and submit it here</li>
+        </ol>
+
+        <div class="fw-bold mb-2">💡 Hint 1</div>
+        <div>
+          IDOR happens when an app trusts an object ID in the URL and forgets to check if you’re allowed to access it.
+        </div>
+
+        <details class="mt-2 mb-2">
+          <summary class="fw-bold">Hint 2 (click)</summary>
+          <div class="mt-2">
+            Try changing <code>?uid=1</code> to <code>?uid=2</code>.
+          </div>
+        </details>
+
+        <details>
+          <summary class="fw-bold">Hint 3 (click)</summary>
+          <div class="mt-2">
+            If <code>uid=2</code> doesn’t exist, try <code>uid=3</code> or <code>uid=4</code>.
+          </div>
+        </details>
+      </div>
+    {% endif %}
+    
+    {% if challenge.lab_type == "sqli_admin" %}
+  <div class="alert alert-secondary mb-3">
+    <div class="fw-bold mb-2">🎯 Goal</div>
+    <div>
+      In the <b>Vulnerable</b> lab, use SQL Injection to make the query return the <b>admin</b> user and reveal the <b>flag</b>.
+    </div>
+
+    <hr class="my-2">
+
+    <div class="fw-bold mb-2">✅ Steps</div>
+    <ol class="mb-2">
+      <li>Click <b>Open SQLi Lab (Vulnerable)</b></li>
+      <li>Try a normal username first (example: <code>guest</code>)</li>
+      <li>Try an injection input that targets the <b>admin</b> account</li>
+      <li>If the result shows <b>role: admin</b>, the <b>flag</b> will appear</li>
+      <li>Open <b>Secure Version</b> and try again (it should fail)</li>
+      <li>Copy the flag and submit it here</li>
+    </ol>
+
+    <div class="fw-bold mb-2">💡 Hint 1</div>
+    <div>
+      This level is about <b>targeting admin</b>, not just returning any user.
+    </div>
+
+    <details class="mt-2 mb-2">
+      <summary class="fw-bold">Hint 2 (click)</summary>
+      <div class="mt-2">
+        SQL comments can ignore the rest of a query. Example: <code>--</code>
+      </div>
+    </details>
+
+    <details>
+      <summary class="fw-bold">Hint 3 (click)</summary>
+      <div class="mt-2">
+        Try: <code>admin' --</code>
+      </div>
+    </details>
+  </div>
+{% endif %}
+
+
+
     {# ---------------- Lab links ---------------- #}
     {% if challenge.lab_type and challenge.lab_type != "none" %}
       <div class="mb-3">
@@ -18,7 +206,8 @@
           <a class="btn btn-danger btn-sm"
               href="/lab/sqli?mode=vuln&challenge_id={{ challenge.id }}">Open SQLi Lab (Vulnerable)</a>
           <a class="btn btn-success btn-sm"
-              href="/lab/sqli?mode=secure&challenge_id={{ challenge.id }}">View Secure Version</a>
+              href="/lab/sqli?mode=secure&challenge_id={{ challenge.id }}">Open Secure Version</a>
+
 
         {% elif challenge.lab_type == "xss" %}
           <a class="btn btn-danger btn-sm"
@@ -26,6 +215,13 @@
           <a class="btn btn-success btn-sm"
               href="/lab/xss?mode=secure&challenge_id={{ challenge.id }}">View Secure Version</a>
 
+        {% elif challenge.lab_type == "sqli_admin" %}
+          <a class="btn btn-danger btn-sm"
+            href="/lab/sqli?mode=vuln&challenge_id={{ challenge.id }}">Open SQLi Lab (Vulnerable)</a>
+          <a class="btn btn-success btn-sm"
+            href="/lab/sqli?mode=secure&challenge_id={{ challenge.id }}">Open Secure Version</a>
+
+              
         {% elif challenge.lab_type == "stored_xss" %}
           <a class="btn btn-danger btn-sm"
               href="/lab/stored-xss?mode=vuln&challenge_id={{ challenge.id }}">Open Stored XSS Lab (Vulnerable)</a>
@@ -58,6 +254,7 @@
 
     {# ---------------- Flag submit ---------------- #}
     {% if not current_user.is_admin %}
+      <div class="fw-bold mb-2">🏁 Submit your flag</div>
       <form method="POST" class="d-flex gap-2">
         <input class="form-control" name="flag" placeholder="Enter flag" required />
         <button class="btn btn-dark" type="submit">Submit Flag</button>
