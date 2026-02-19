@@ -1,46 +1,88 @@
-{% extends "base.html"%}
+{% extends "base.html" %}
 
-{% block title %} CSRF Lab{%endblock %}
-{% block header %}CSRF Lab ({{ Mode }}){%endblock %}
-{% block subheader %}Vulnerable vs Secure {%endblock%}
+{% block title %}CSRF Lab{% endblock %}
+{% block header %}CSRF Lab ({{ mode|capitalize }}){% endblock %}
+{% block subheader %}Attacker Page · Vulnerable vs Secure{% endblock %}
 
 {% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex gap-2 flex-wrap">
+        <a class="btn btn-danger btn-sm"
+            href="/lab/csrf?mode=vuln{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+            Vulnerable
+        </a>
+        <a class="btn btn-success btn-sm"
+            href="/lab/csrf?mode=secure{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+            Secure
+        </a>
+    </div>
+
+    {% if challenge_id %}
+        <a class="btn btn-outline-dark btn-sm" href="/challenges/{{ challenge_id }}">
+            Back to Challenge →
+        </a>
+    {% endif %}
+</div>
 
 <div class="card shadow-sm">
     <div class="card-body">
 
-        <p>
-            Mode:
-            <a class= "btn btn-danger btn-sm" href="/lab/csrf?mode=vuln">Vulnerable</a> |
-            <a class= "btn btn-success btn-sm" href="/lab/csrf?mode=secure">Secure</a>
-        </p>
+        <div class="alert alert-secondary">
+            <div class="fw-bold">🧨 Attacker Page (Simulation)</div>
+            <div class="text-muted small">
+                This page simulates a malicious website that secretly sends a request while you are logged in.
+            </div>
+        </div>
 
-        <form method="POST" class="d-flex gap-2 mb-3">
-            <button class="btn btn-dark" type="submit">Update Email</button>
+    <p class="text-muted mb-2">
+        If the target site has no CSRF protection, the forged request will succeed.
+    </p>
+
+    <div class="border rounded p-3">
+        <div class="fw-bold mb-2">Malicious action:</div>
+        <div class="text-muted small mb-2">
+            “Change victim’s email to attacker@example.com”
+        </div>
+
+        <!-- forged request -->
+        <form method="POST"
+                action="/lab/csrf/victim?mode={{ mode }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
+            <input type="hidden" name="new_email" value="attacker@example.com">
+
+            {# secure mode demo: token required; attacker doesn't have it #}
+            {% if mode == "secure" %}
+            <input type="hidden" name="csrf_token" value="">
+            <div class="alert alert-warning small mb-2">
+                Secure mode expects a CSRF token. The attacker page cannot generate a valid token.
+            </div>
+            {% endif %}
+
+            <button class="btn btn-dark" type="submit">Launch Attack</button>
         </form>
-
-        {% if message %}
-            <div class="alert alert-info">{{ message }}</div>
-        {% endif %}
-
-        {% if flag %}
-            <div class="alert alert-success"><b>Flag:</b> {{ flag }}</div>
-        {% endif %}
+    </div>
 
         <hr>
-        <h3>Why this worked</h3>
-        <p class="text-muted">
 
-            {% if mode == "vuln" %}
-            The application accepts state-changing requests without verifying their origin.
-            {% else %}
-            The application blocks requests that lack a valid CSRF token.
-            {% endif %}
-        </p>
+        <h5>🧠 Why this works</h5>
+        {% if mode == "vuln" %}
+            <p class="text-muted">
+                The server accepts a state-changing request without verifying it came from a real user action.
+                Because you're logged in, your browser includes your session automatically.
+            </p>
+        {% else %}
+            <p class="text-muted">
+                The server requires a CSRF token. Without a valid token, forged requests are blocked.
+            </p>
+        {% endif %}
 
-        <h3>How it’s fixed</h3>
-        <p class="text-muted">Use CSRF tokens to ensure requests originate from legitimate user interactions.</p>
+        <h5 class="mt-3">🛡 How it’s fixed</h5>
+            <p class="text-muted">
+            Use CSRF tokens for all state-changing requests (POST/PUT/DELETE). The token must be tied to the user session
+            and validated on the server.
+            </p>
 
     </div>
 </div>
+
 {% endblock %}

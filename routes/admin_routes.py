@@ -83,7 +83,7 @@ def edit_challenge(challenge_id):
 
         db.session.commit()
         flash("Challenge updated.")
-        audit("ADMIN_EDIT_CHALLENGE", current_user, {"challenge_id": challenge.id})
+        audit("ADMIN_DELETE_CHALLENGE", current_user, {"challenge_id": c.id})
         return redirect(url_for("admin.manage_challenges"))
 
     return render_template("admin/challenge_edit.html", c=c)
@@ -96,5 +96,5 @@ def delete_challenge(challenge_id):
     db.session.delete(c)
     db.session.commit()
     flash("Challenge deleted.")
-    audit("ADMIN_DELETE_CHALLENGE", current_user, {"challenge_id": challenge.id})
+    audit("ADMIN_DELETE_CHALLENGE", current_user, {"challenge_id": c.id})
     return redirect(url_for("admin.manage_challenges"))

@@ -196,7 +196,73 @@
   </div>
 {% endif %}
 
+{% if challenge.lab_type == "csrf" %}
+  <div class="alert alert-secondary mb-3">
+    <div class="fw-bold mb-2">🎯 Goal</div>
+    <div>Trigger an unauthorized state-changing request in the <b>Vulnerable</b> lab and reveal the <b>flag</b>.</div>
 
+    <hr class="my-2">
+
+    <div class="fw-bold mb-2">✅ Steps</div>
+    <ol class="mb-2">
+      <li>Open <b>CSRF Lab (Vulnerable)</b></li>
+      <li>Click <b>Launch Attack</b> (simulates a malicious site)</li>
+      <li>If the victim request is accepted, the flag appears</li>
+      <li>Open <b>Secure Version</b> and try again (it should be blocked)</li>
+      <li>Copy the flag and submit it here</li>
+    </ol>
+
+    <details class="mb-2">
+      <summary class="fw-bold">Hint 1 (click)</summary>
+      <div class="mt-2">CSRF works because browsers automatically send cookies/session when you’re logged in.</div>
+    </details>
+
+    <details>
+      <summary class="fw-bold">Hint 2 (click)</summary>
+      <div class="mt-2">The defense is a CSRF token checked by the server.</div>
+    </details>
+  </div>
+{% endif %}
+
+{% if challenge.lab_type == "bac" %}
+  <div class="alert alert-secondary mb-3">
+    <div class="fw-bold mb-2">🎯 Goal</div>
+    <div>
+      Access an <b>admin-only page</b> as a normal user in the <b>Vulnerable</b> version and reveal the <b>flag</b>.
+    </div>
+
+    <hr class="my-2">
+
+    <div class="fw-bold mb-2">✅ Steps</div>
+    <ol class="mb-2">
+      <li>Click <b>Open BAC Lab (Vulnerable)</b></li>
+      <li>If you can see the admin panel content as a normal user, the <b>flag</b> will appear</li>
+      <li>Copy the flag</li>
+      <li>Open <b>Secure Version</b> and try again</li>
+      <li>Secure should show <b>Access denied</b></li>
+      <li>Come back here and submit the flag</li>
+    </ol>
+
+    <div class="fw-bold mb-2">💡 Hint 1</div>
+    <div>
+      Broken Access Control means the app forgets to check permissions before showing sensitive pages.
+    </div>
+
+    <details class="mt-2 mb-2">
+      <summary class="fw-bold">Hint 2 (click)</summary>
+      <div class="mt-2">
+        In the secure version, only <b>admin</b> should access the page.
+      </div>
+    </details>
+
+    <details>
+      <summary class="fw-bold">Hint 3 (click)</summary>
+      <div class="mt-2">
+        Look for the difference: <b>Vulnerable shows the admin panel</b>, but <b>Secure blocks it</b>.
+      </div>
+    </details>
+  </div>
+{% endif %}
 
     {# ---------------- Lab links ---------------- #}
     {% if challenge.lab_type and challenge.lab_type != "none" %}
@@ -239,13 +305,13 @@
           <a class="btn btn-danger btn-sm"
               href="/lab/csrf?mode=vuln&challenge_id={{ challenge.id }}">Open CSRF Lab (Vulnerable)</a>
           <a class="btn btn-success btn-sm"
-              href="/lab/csrf?mode=secure&challenge_id={{ challenge.id }}">View Secure Version</a>
+              href="/lab/csrf?mode=secure&challenge_id={{ challenge.id }}">Open Secure Version</a>
 
         {% elif challenge.lab_type == "bac" %}
           <a class="btn btn-danger btn-sm"
               href="/lab/bac?mode=vuln&challenge_id={{ challenge.id }}">Open BAC Lab (Vulnerable)</a>
           <a class="btn btn-success btn-sm"
-              href="/lab/bac?mode=secure&challenge_id={{ challenge.id }}">View Secure Version</a>
+              href="/lab/bac?mode=secure&challenge_id={{ challenge.id }}">Open Secure Version</a>
 
         {% endif %}
 

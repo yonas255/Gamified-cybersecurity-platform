@@ -8,25 +8,26 @@ bac_bp = Blueprint("bac", __name__)
 @login_required
 def lab_bac():
     mode = request.args.get("mode", "vuln")
+    if mode not in ("vuln", "secure"):
+        mode = "vuln"
+
+    challenge_id = request.args.get("challenge_id", type=int)
+
+    blocked = False
     flag = None
 
-    if mode == "secure":
-        # ✅ secure: enforce admin check
-        if not current_user.is_admin:
-            return render_template(
-                "lab_bac.html",
-                mode=mode,
-                blocked=True,
-                flag=None
-            )
+    # ✅ secure: enforce admin check
+    if mode == "secure" and not getattr(current_user, "is_admin", False):
+        blocked = True
 
-    # ❌ vulnerable OR admin user
-    if mode == "vuln" and not current_user.is_admin:
+    # ✅ vuln: normal users can access (broken), so reveal flag
+    if mode == "vuln" and not getattr(current_user, "is_admin", False):
         flag = FLAGS["bac"]
 
     return render_template(
         "lab_bac.html",
         mode=mode,
-        blocked=False,
+        challenge_id=challenge_id,
+        blocked=blocked,
         flag=flag
     )
