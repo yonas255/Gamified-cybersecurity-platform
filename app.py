@@ -316,6 +316,29 @@ def create_app():
         db.session.commit()
         return {"ok": True, "message": "Seeded BAC challenge"}
 
+    @app.route("/admin/seed-sqli-admin")
+    @admin_required
+    def seed_sqli_admin():
+        title = "SQLi: Admin Bypass (Simulation)"
+        existing = Challenge.query.filter_by(title=title).first()
+        if existing:
+            return {"ok": True, "message": "SQLi Admin already seeded"}
+
+        flag = FLAGS["sqli_admin"]
+        flag_hash = bcrypt.hashpw(flag.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+        c = Challenge(
+            title=title,
+            description="Use SQL Injection to make the query return the admin user and reveal the flag.",
+            difficulty="Medium",
+            points=150,
+            flag_hash=flag_hash,
+            lab_type="sqli_admin"
+    )
+
+        db.session.add(c)
+        db.session.commit()
+        return {"ok": True, "message": "Seeded SQLi Admin challenge"}
     
     return app
     
