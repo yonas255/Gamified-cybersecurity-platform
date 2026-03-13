@@ -13,8 +13,8 @@
     </a>
 
     {% if challenge_id %}
-        <a class="btn btn-outline-dark btn-sm" href="/challenges/{{ challenge_id }}">
-        Back to Challenge →
+        <a class="btn btn-light btn-sm fw-bold" href="/challenges/{{ challenge_id }}">
+            Back to Challenge →
         </a>
     {% endif %}
 </div>
@@ -47,7 +47,7 @@
 
         <hr>
 
-        <h5>🧠 What to learn</h5>
+        <h5>What to learn</h5>
         <p class="text-muted">
             CSRF is about tricking a logged-in user’s browser to send a request they didn’t intend.
             The fix is a server-validated CSRF token.
@@ -60,7 +60,7 @@
 function copyFlag() {
     const el = document.getElementById("flagText");
     if (!el) return;
-    navigator.clipboard.writeText(el.innerText).then(() => alert("Flag copied ✅"));
+    navigator.clipboard.writeText(el.innerText).then(() => alert("Flag copied"));
     }
 </script>
 

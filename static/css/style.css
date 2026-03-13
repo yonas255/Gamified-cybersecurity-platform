@@ -1,19 +1,73 @@
-/* Professional base */
-.bg-page {
-    background: #f5f6f8;
+html, body {
+    height: 100%;
 }
 
-/* If you add static/images/bg.jpg it will automatically show */
-.bg-page {
-    background: url("../images/pic1.jpg") no-repeat center center fixed, #f5f6f8;
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+body.bg-page {
+    min-height: 100vh;
+    background-image: url("/static/images/pic1.jpg");
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.card:hover{
+transform: translateY(-4PX);
+transition: 0.2s;
+}
+
+.glass-card {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 16px;
+}
+
+/* Optional: slight dark overlay effect */
+body.bg-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 1;
 }
 
 main.container {
-    min-height: 60vh;
+    flex: 1;
 }
 
-/* Make cards readable on top of background */
+/* Make cards readable */
 .card {
     border-radius: 16px;
+}
+
+.quote-section{
+    width:100%;
+    background:#111;
+    color:white;
+    text-align:center;
+    padding:80px 20px;
+}
+
+.quote-section p{
+    font-size:1.5rem;
+    font-weight:500;
+}
+
+.quote-section footer{
+    margin-top:10px;
+    font-size:0.9rem;
+    color:#bbb;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
 }

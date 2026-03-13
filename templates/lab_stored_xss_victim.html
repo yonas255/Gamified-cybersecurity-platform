@@ -8,14 +8,13 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
 
-    <a class="btn btn-outline-dark btn-sm"
+    <a class="btn btn-light btn-sm fw-bold"
         href="/lab/stored-xss?mode={{ mode }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
         ← Back to Attacker View
     </a>
 
     {% if challenge_id %}
-        <a class="btn btn-outline-dark btn-sm"
-            href="/challenges/{{ challenge_id }}">
+        <a class="btn btn-light btn-sm fw-bold" href="/challenges/{{ challenge_id }}">
             Back to Challenge →
         </a>
     {% endif %}
@@ -61,7 +60,7 @@ function copyFlag() {
     const el = document.getElementById("flagText");
     if (!el) return;
     navigator.clipboard.writeText(el.innerText).then(() => {
-        alert("Flag copied ✅");
+        alert("Flag copied");
     });
 }
 </script>

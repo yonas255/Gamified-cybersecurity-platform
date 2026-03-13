@@ -8,33 +8,18 @@
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h5 class="mb-0">Lab Mode: {{ mode|capitalize }}</h5>
+    <h5 class="mb-0 fw-bold text-white">
+        Lab Mode: {{ mode|capitalize }}
+    </h5>
 
     {% if challenge_id %}
-    <a class="btn btn-outline-dark btn-sm"
-        href="/challenges/{{ challenge_id }}">
+    <a class="btn btn-light btn-sm fw-bold" href="/challenges/{{ challenge_id }}">
         Back to Challenge →
     </a>
     {% endif %}
 </div>
 
-<!-- 🎯 Mission Banner -->
-<div class="alert alert-info d-flex justify-content-between align-items-center">
-    <div>
-        <b>🎯 Mission:</b> Make the query return a user in <b>Vulnerable</b> mode to reveal the flag.
-        <div class="small text-muted">Tip: Try payloads in the username field.</div>
-    </div>
 
-    <span class="badge text-bg-secondary">
-        {% if flag %}
-            ✅ Completed
-        {% elif query_used %}
-            🔍 Attempted
-        {% else %}
-            🟡 Not started
-        {% endif %}
-    </span>
-</div>
 
 <div class="card shadow-sm">
     <div class="card-body">
@@ -73,12 +58,12 @@
             {% endif %}
         {% endif %}
 
-        <!-- 🎉 Success Section -->
+        <!-- Success Section -->
         {% if flag %}
             <div class="alert alert-success">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <div class="fw-bold">🎉 Success! You triggered SQL injection.</div>
+                        <div class="fw-bold"> Success! You triggered SQL injection.</div>
                         <div class="small">Copy the flag and submit it on the challenge page.</div>
                     </div>
                     <span class="badge text-bg-success">+{{ points }} pts</span>
@@ -109,7 +94,7 @@
         <hr>
 
         <!-- Explanation -->
-        <h5>🧠 Why this worked</h5>
+        <h5>Why this worked</h5>
 
         {% if mode == "vuln" %}
         <div class="text-muted">
@@ -198,7 +183,7 @@
         </div>
         {% endif %}
 
-        <h5 class="mt-3">🛡 How it’s fixed</h5>
+        <h5 class="mt-3"> How it’s fixed</h5>
 
         <div class="text-muted">
             <p>

@@ -2,40 +2,165 @@
 
 {% block title %}Dashboard{% endblock %}
 {% block header %}Dashboard{% endblock %}
-{% block subheader %}Choose a challenge level and learn safely{% endblock %}
+{% block subheader %}Practice real cybersecurity vulnerabilities safely{% endblock %}
 
 {% block content %}
 
 {% if not current_user.is_admin %}
 <div class="card shadow-sm mb-4">
     <div class="card-body">
-        <h5 class="mb-2">Your Progress</h5>
-        <div class="progress" style="height: 22px;">
+
+        <h5 class="mb-3">Your Progress</h5>
+
+        <div class="progress" style="height:22px;">
             <div
                 id="progressBar"
                 class="progress-bar bg-success"
                 role="progressbar"
-                style="width: 0%;"
+                style="width: {{ percent }}%;"
                 aria-valuenow="{{ percent }}"
                 aria-valuemin="0"
                 aria-valuemax="100">
                 {{ percent }}%
             </div>
         </div>
-            <small class="text-muted d-block mt-2">
+
+        <small class="text-muted d-block mt-2">
             {{ completed }} / {{ total }} challenges completed
-            </small>
+        </small>
+
     </div>
 </div>
 {% endif %}
 
-<div class="card shadow-sm">
-    <div class="card-body">
-        <p class="mb-2">Logged in as: <b>{{ current_user.username }}</b></p>
-        <div class="d-flex gap-2">
-            <a class="btn btn-dark" href="/challenges">Challenges</a>
-            <a class="btn btn-outline-dark" href="/leaderboard">Leaderboard</a>
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+
+                <h4> SQL Injection</h4>
+
+                <p class="text-muted">
+                    SQL Injection occurs when user input is directly inserted into a database query.
+                    Attackers can manipulate the query to bypass authentication or retrieve sensitive data.
+                </p>
+
+                <p class="small text-muted">
+                    In these labs you will exploit vulnerable SQL queries and then learn
+                    how secure coding practices such as parameterized queries prevent the attack.
+                </p>
+
+                <a href="/challenges" class="btn btn-success btn-sm">
+                    Start SQL Injection Labs
+                </a>
+
+            </div>
         </div>
     </div>
+
+
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+
+                <h4> Cross-Site Scripting (XSS)</h4>
+
+                <p class="text-muted">
+                    Cross-Site Scripting allows attackers to inject malicious JavaScript
+                    into web pages viewed by other users.
+                </p>
+
+                <p class="small text-muted">
+                    You will practice both reflected and stored XSS attacks and learn
+                    how secure output encoding protects web applications from these threats.
+                </p>
+
+                <a href="/challenges" class="btn btn-warning btn-sm">
+                    Start XSS Labs
+                </a>
+
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
+<div class="row g-4">
+
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+
+                <h4>Access Control Vulnerabilities</h4>
+
+                <p class="text-muted">
+                    Access control vulnerabilities occur when applications fail
+                    to properly restrict what authenticated users are allowed to do.
+                </p>
+
+                <p class="small text-muted">
+                    In these labs you will explore IDOR and Broken Access Control
+                    vulnerabilities by manipulating URLs and accessing restricted resources.
+                </p>
+
+                <a href="/challenges" class="btn btn-danger btn-sm">
+                    Start Access Control Labs
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+
+                <h4> Secure Coding Concepts</h4>
+
+                <p class="text-muted">
+                    Every vulnerable lab includes a secure implementation
+                    that demonstrates how developers properly fix the vulnerability.
+                </p>
+
+                <p class="small text-muted">
+                    The goal of this platform is not only to exploit vulnerabilities
+                    but also to understand how secure software development prevents them.
+                </p>
+
+                <a href="/challenges" class="btn btn-dark btn-sm">
+                    Explore Challenges
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</main>
+
+<section class="quote-section text-center">
+
+    <div class="container py-5">
+
+
+        <blockquote class="blockquote">
+            <p class="mb-3 fs-4">
+                “Security is not a product, but a process.”
+            </p>
+
+            <footer class="blockquote-footer text-white-50">
+                Bruce Schneier
+            </footer>
+        </blockquote>
+
+    </div>
+
+</section>
+
+<main class="container pb-5">
 {% endblock %}
+

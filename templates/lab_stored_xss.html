@@ -25,7 +25,7 @@
             <button class="btn btn-outline-danger btn-sm" type="submit">Clear</button>
         </form>
 
-        <a class="btn btn-outline-primary btn-sm"
+        <a class="btn btn-dark btn-sm fw-bold"
             href="/lab/stored-xss/victim?mode={{ mode }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
             👤 View as Victim
         </a>
@@ -33,7 +33,7 @@
     </div>
 
     {% if challenge_id %}
-        <a class="btn btn-outline-dark btn-sm" href="/challenges/{{ challenge_id }}">
+        <a class="btn btn-light btn-sm fw-bold" href="/challenges/{{ challenge_id }}">
             Back to Challenge →
         </a>
     {% endif %}
@@ -43,7 +43,7 @@
     <div class="card-body">
 
         <div class="alert alert-secondary">
-        🧪 <b>Attacker View:</b> Post a comment. Then click
+        <b>Attacker View:</b> Post a comment. Then click
         <b>View as Victim</b> to see if it executes.
         </div>
 

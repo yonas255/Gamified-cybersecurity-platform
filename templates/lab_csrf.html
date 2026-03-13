@@ -19,7 +19,7 @@
     </div>
 
     {% if challenge_id %}
-        <a class="btn btn-outline-dark btn-sm" href="/challenges/{{ challenge_id }}">
+        <a class="btn btn-light btn-sm fw-bold" href="/challenges/{{ challenge_id }}">
             Back to Challenge →
         </a>
     {% endif %}
@@ -29,7 +29,7 @@
     <div class="card-body">
 
         <div class="alert alert-secondary">
-            <div class="fw-bold">🧨 Attacker Page (Simulation)</div>
+            <div class="fw-bold"> Attacker Page (Simulation)</div>
             <div class="text-muted small">
                 This page simulates a malicious website that secretly sends a request while you are logged in.
             </div>
@@ -64,7 +64,7 @@
 
         <hr>
 
-        <h5>🧠 Why this works</h5>
+        <h5>Why this works</h5>
         {% if mode == "vuln" %}
             <p class="text-muted">
                 The server accepts a state-changing request without verifying it came from a real user action.
@@ -76,7 +76,7 @@
             </p>
         {% endif %}
 
-        <h5 class="mt-3">🛡 How it’s fixed</h5>
+        <h5 class="mt-3">How it’s fixed</h5>
             <p class="text-muted">
             Use CSRF tokens for all state-changing requests (POST/PUT/DELETE). The token must be tied to the user session
             and validated on the server.

@@ -94,3 +94,14 @@
 2026-03-11T14:24:19.149298 | LOGOUT | user=anonymous | extra=None
 2026-03-11T14:26:08.828909 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}
 2026-03-11T15:03:55.301903 | LOGOUT | user=anonymous | extra=None
+2026-03-11T16:43:29.609413 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}
+2026-03-11T16:55:58.628869 | LOGOUT | user=anonymous | extra=None
+2026-03-11T16:57:46.202815 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}
+2026-03-12T17:09:10.178990 | LOGOUT | user=anonymous | extra=None
+2026-03-12T17:09:39.380927 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}
+2026-03-12T17:21:26.768880 | LOGOUT | user=anonymous | extra=None
+2026-03-12T17:22:24.085138 | LOGIN_SUCCESS | user=yonas1 | extra={'ip': '127.0.0.1'}
+2026-03-13T21:36:02.650653 | LOGOUT | user=anonymous | extra=None
+2026-03-13T21:36:20.330462 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-03-13T23:09:08.172507 | LOGOUT | user=anonymous | extra=None
+2026-03-13T23:15:37.653473 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}

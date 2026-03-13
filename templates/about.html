@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+{% block header %}About This Platform{% endblock %}
+{% block subheader %}Gamified Cybersecurity Training Environment{% endblock %}
+
+{% block content %}
+
+<!-- Project intro -->
+<div class="card shadow-sm p-4 mb-4">
+
+    <div class="row">
+
+        <div class="col-md-8">
+
+            <h4>Project Overview</h4>
+
+            <p class="text-muted">
+                This platform is a gamified cybersecurity training environment
+                designed to help students learn common web vulnerabilities
+                in a safe and controlled environment.
+            </p>
+
+            <p class="text-muted">
+                Users practice exploiting vulnerabilities such as SQL Injection,
+                Cross-Site Scripting (XSS), Cross-Site Request Forgery (CSRF),
+                Insecure Direct Object Reference (IDOR), and Broken Access Control.
+            </p>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="border rounded p-3 bg-light">
+
+                <h5>Project Info</h5>
+
+                <ul class="text-muted mb-0">
+                    <li><b>Developer:</b> Yonas Haftom</li>
+                    <li><b>Technologies:</b> Flask, Python, SQLite</li>
+                    <li><b>Frontend:</b> Bootstrap</li>
+                    <li><b>Purpose:</b> Educational cybersecurity training</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card shadow-sm p-4 mb-4">
+
+    <div class="row text-center">
+
+        <div class="col-md-4">
+            <h5>⚡ Vulnerability Labs</h5>
+            <p class="text-muted">
+                Practice exploiting common web security vulnerabilities
+                using realistic but safe simulations.
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <h5>🛡 Secure Coding</h5>
+            <p class="text-muted">
+                Every vulnerable lab includes a secure version that
+                demonstrates how developers fix the vulnerability.
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <h5>🏆 Gamified Learning</h5>
+            <p class="text-muted">
+                Solve Capture-the-Flag challenges, track progress,
+                and compete on the leaderboard.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+</main>
+
+<section class="quote-section text-center">
+
+    <div class="container py-5">
+
+
+        <blockquote class="blockquote">
+            <p class="mb-3 fs-4">
+                “Cybersecurity is much more than technology - it is a mindset.”
+            </p>
+
+            <footer class="blockquote-footer text-white-50">
+                Cybersecurity Concept
+            </footer>
+        </blockquote>
+
+    </div>
+
+</section>
+
+<main class="container pb-5">
+{% endblock %}

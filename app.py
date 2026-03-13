@@ -315,7 +315,10 @@ def create_app():
         db.session.add(c)
         db.session.commit()
         return {"ok": True, "message": "Seeded BAC challenge"}
-
+    @app.route("/about")
+    def aboute():
+        return render_template("about.html")
+    
     @app.route("/admin/seed-sqli-admin")
     @admin_required
     def seed_sqli_admin():
