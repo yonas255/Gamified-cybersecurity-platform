@@ -105,3 +105,20 @@
 2026-03-13T21:36:20.330462 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
 2026-03-13T23:09:08.172507 | LOGOUT | user=anonymous | extra=None
 2026-03-13T23:15:37.653473 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-03-19T22:28:36.556113 | LOGIN_FAILED | user=admin | extra={'email': 'admin@example.com', 'ip': '127.0.0.1'}
+2026-03-19T22:29:17.259989 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-03-19T22:29:25.310099 | LOGOUT | user=anonymous | extra=None
+2026-03-19T22:30:12.982136 | LOGIN_FAILED | user=admin | extra={'email': 'admin@example.com', 'ip': '127.0.0.1'}
+2026-03-19T22:30:43.241507 | LOGIN_FAILED | user=admin | extra={'email': 'admin@example.com', 'ip': '127.0.0.1'}
+2026-03-19T22:31:03.848377 | LOGIN_FAILED | user=admin | extra={'email': 'admin@example.com', 'ip': '127.0.0.1'}
+2026-03-19T22:31:25.766133 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-03-19T22:32:08.036979 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-03-19T23:06:54.606307 | LOGOUT | user=anonymous | extra=None
+2026-03-19T23:07:49.749533 | LOGIN_FAILED | user=admin | extra={'email': 'admin@example.com', 'ip': '127.0.0.1'}
+2026-03-19T23:08:06.835022 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-03-19T23:09:23.156035 | LOGOUT | user=anonymous | extra=None
+2026-03-19T23:10:27.236418 | LOGIN_FAILED | user=yon25 | extra={'email': 'yonas@gmail.com', 'ip': '127.0.0.1'}
+2026-03-19T23:10:56.187196 | LOGIN_FAILED | user=yon25 | extra={'email': 'yonas@gmail.com', 'ip': '127.0.0.1'}
+2026-03-19T23:11:55.166784 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}
+2026-03-20T00:37:29.157404 | LOGOUT | user=anonymous | extra=None
+2026-03-20T00:37:39.794998 | LOGIN_SUCCESS | user=yonas1 | extra={'ip': '127.0.0.1'}
