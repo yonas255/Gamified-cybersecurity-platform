@@ -1,10 +1,13 @@
-﻿{% extends "base.html" %}
+﻿<!--defining the page structure using template inheritance
+    and sets title, header, and subheader for the admin dashboard-->
+{% extends "base.html" %}
 
 {% block title %}Admin{% endblock %}
 {% block header %}Admin Dashboard{% endblock %}
 {% block subheader %}Manage challenges (admin-only){% endblock %}
 
 {% block content %}
+<!--creating the main admin card section-->
 <div class="card shadow-sm">
   <div class="card-body">
     <p class="mb-3">Admin tools:</p>
@@ -15,13 +18,14 @@
     </div>
 
     <hr>
+    <!--note indicating only admin can access-->
     <p class="small text-muted mb-0">
       Only users marked as admin can access this page.
     </p>
   </div>
 </div>
 </main>
-
+<!--adding a styled quote section for visual design-->
 <section class="quote-section text-center">
 
     <div class="container py-5">
@@ -40,6 +44,6 @@
     </div>
 
 </section>
-
+<!--reopens the main container layout and close the content block for proper footer design to be layout-->
 <main class="container pb-5">
 {% endblock %}

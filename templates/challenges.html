@@ -1,13 +1,13 @@
-﻿{% extends "base.html" %}
-
+﻿<!--base template with required layouts-->
+{% extends "base.html" %}
 {% block title %}Challenges{% endblock %}
 {% block header %}Challenges{% endblock %}
 {% block subheader %}Complete Beginner to unlock Medium, complete Medium to unlock Hard{% endblock %}
-
 {% block content %}
-
+<!--content start here-->
+<!--hidden alert box used to show a message when a user clicks a locked challenge-->
 <div id="lockAlert" class="alert alert-warning d-none" role="alert"></div>
-
+<!--creating a responsive three-column layout for beginner, medium, and hard challenge-->
 <div class="row g-4">
   {% for level in ["Beginner","Medium","Hard"] %}
   <div class="col-12 col-lg-4">
@@ -16,15 +16,16 @@
         <div class="d-flex justify-content-between align-items-center mb-2">
           <h2 class="h5 mb-0">{{ level }}</h2>
 
-          {# quick count badge #}
+          {# quick count badge and displaying the current difficulty level#}
           {% set total = (rows | selectattr("c.difficulty") | list) %}
         </div>
 
         <ul class="list-group list-group-flush">
           {% for r in rows if r.c.difficulty|lower == level|lower %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
-
+              <!--loops through challenge for each difficulty level and displays them as a list-->
               <div class="me-2">
+                <!--shows challenge as a clickable link if unlocked, or muted locked text if unavailable-->
                 {% if r.unlocked %}
                   <a class="text-decoration-none fw-semibold" href="/challenges/{{ r.c.id }}">{{ r.c.title }}</a>
                 {% else %}
@@ -36,18 +37,21 @@
                   </span>
                   <span class="ms-2 badge bg-light text-dark border">Finish previous level</span>
                 {% endif %}
-
+                <!--dispalying the point available for each challenge-->
                 <div class="small text-muted">{{ r.c.points }} pts</div>
               </div>
-
+              <!--shows status bar: locked-->
               {% if not r.unlocked %}
                 <span class="badge bg-secondary">Locked</span>
+              <!--STATUS: Done--> 
               {% elif r.done %}
                 <span class="badge bg-success">Done</span>
+              <!--STATUS: Open depends on user progress-->
               {% else %}
                 <span class="badge bg-primary">Open</span>
               {% endif %}
             </li>
+          <!--fallback message-->
           {% else %}
             <li class="list-group-item text-muted">No {{ level }} challenges yet.</li>
           {% endfor %}
@@ -60,7 +64,7 @@
 </div>
 
 </main>
-
+<!--Quote section for visual design-->
 <section class="quote-section text-center">
 
     <div class="container py-5">
@@ -70,7 +74,7 @@
             <p class="mb-3 fs-4">
                 “Learning to break systems is the first step to learning how to secure them.”
             </p>
-
+            <!--footer-->
             <footer class="blockquote-footer text-white-50">
                 Cybersecurity Training Principle
             </footer>
@@ -79,6 +83,6 @@
     </div>
 
 </section>
-
+<!--Reopens main container for visual design and close content block-->
 <main class="container pb-5">
 {% endblock %}

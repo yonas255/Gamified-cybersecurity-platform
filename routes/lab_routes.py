@@ -1,24 +1,26 @@
-import os
-import sqlite3
-from flask import Blueprint, redirect, render_template, request, current_app
-from flask_login import login_required
+import os # models for file handling
+import sqlite3 # database operations
+from flask import Blueprint, redirect, render_template, request, current_app # flask routing
+from flask_login import login_required # authentication
 from flags_local import FLAGS
-from models.challenge import Challenge
+from models.challenge import Challenge # challenge model
 
-lab_bp = Blueprint("lab", __name__)
+lab_bp = Blueprint("lab", __name__) # creates a blue print to group all lab related routes
 
-def _db_path():
-    # reliable path to your sqlite db file
+def _db_path(): # helper function to generate a reliable file path for SQLite database
+    # reliable path to sqlite db file
     return os.path.join(current_app.root_path, "instance", "app.db")
 
 
-def _ensure_lab_data():
+def _ensure_lab_data(): # making sure the lab database
+    
     db_file = _db_path()
     os.makedirs(os.path.dirname(db_file), exist_ok=True)
 
     con = sqlite3.connect(db_file)
     cur = con.cursor()
-
+    
+    # sample data exist by creating a table and inserting default users if empty
     cur.execute("""
         CREATE TABLE IF NOT EXISTS lab_users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,12 +37,12 @@ def _ensure_lab_data():
 
     con.commit()
     con.close()
-
+# SQL injection lab, captures errors,
 @lab_bp.route("/lab/sqli", methods=["GET", "POST"])
 @login_required
 def lab_sqli():
     _ensure_lab_data()
-
+    # supports vulnerable and secure models
     mode = request.args.get("mode", "vuln")  # vuln or secure
     if mode not in ("vuln", "secure"):
         mode = "vuln"
@@ -56,14 +58,14 @@ def lab_sqli():
     result = None
     flag = None
     query_used = None
-    error = None  # ✅ define for both GET and POST
+    error = None  # define for both GET and POST
 
     if request.method == "POST":
         username = request.form.get("username", "")
 
         con = sqlite3.connect(_db_path())
         cur = con.cursor()
-
+    # executes queries differently depends on mode,
         try:
             if mode == "vuln":
                 query_used = f"SELECT username, role FROM lab_users WHERE username = '{username}'"
@@ -81,13 +83,13 @@ def lab_sqli():
 
         if row:
             result = {"username": row[0], "role": row[1]}
-
+        # reveals flags depending on successful exploitation and lab difficulty
             if mode == "vuln":
-                # Beginner SQLi: any successful result reveals flag
+                # Beginner SQLi
                 if lab_variant == "sqli":
                     flag = FLAGS["sqli"]
 
-                # Medium SQLi: must get admin specifically
+                # Medium SQLi
                 elif lab_variant == "sqli_admin":
                     if result["role"] == "admin":
                         flag = FLAGS["sqli_admin"]
@@ -108,7 +110,7 @@ def lab_sqli():
 
     )
 
-
+# Reflected XSS lab
 @lab_bp.route("/lab/xss", methods=["GET", "POST"])
 @login_required
 def lab_xss():
@@ -120,15 +122,15 @@ def lab_xss():
     text = ""
     rendered = None
     flag = None
-
+    # takes user input
     if request.method == "POST":
         text = request.form.get("text", "")
         rendered = text
 
-        # Only award flag in vulnerable mode when an XSS payload is attempted
+        # revealing a flag in vulnerable mode when a script payload is detected
         if mode == "vuln" and "<script" in text.lower():
             flag = FLAGS["xss"]
-
+    # renders it directly
     return render_template(
         "lab_xss.html",
         mode=mode,
@@ -138,10 +140,8 @@ def lab_xss():
         flag=flag
     )
     
-from flask import redirect, render_template, request
-from flask_login import login_required
-from flags_local import FLAGS
 
+# Stored XSS lab
 @lab_bp.route("/lab/stored-xss", methods=["GET", "POST"])
 @login_required
 def lab_stored_xss():
@@ -151,15 +151,15 @@ def lab_stored_xss():
 
     challenge_id = request.args.get("challenge_id", type=int)
 
-    # In-memory store (per process)
+    # stores user comments in memory
     if not hasattr(lab_stored_xss, "STORE"):
         lab_stored_xss.STORE = []
 
-    # POST = store comment then redirect (prevents double-submit)
+    # store comment then redirect (prevents double-submit)
     if request.method == "POST":
         comment = request.form.get("comment", "").strip()
         if comment:
-            # prevent accidental double post (same comment twice in a row)
+            # preventing duplicate submissions
             if not lab_stored_xss.STORE or lab_stored_xss.STORE[-1] != comment:
                 lab_stored_xss.STORE.append(comment)
 
@@ -169,8 +169,8 @@ def lab_stored_xss():
         return redirect(url)
 
     comments = list(lab_stored_xss.STORE)
-
-    # ✅ IMPORTANT: attacker page never reveals flag
+    # displays stored comments without revealing the flag on the attacker page
+    # attacker page never reveals flag
     flag = None
 
     return render_template(
@@ -181,7 +181,7 @@ def lab_stored_xss():
         flag=flag,
     )
 
-
+# simulating the victim view for stored XSS
 @lab_bp.route("/lab/stored-xss/victim", methods=["GET"])
 @login_required
 def stored_xss_victim():
@@ -195,8 +195,7 @@ def stored_xss_victim():
         lab_stored_xss.STORE = []
 
     comments = list(lab_stored_xss.STORE)
-
-    # ✅ Flag appears ONLY on victim view, ONLY in vuln mode, ONLY if payload exists
+    # flag is only revealed in vulnerable mode if a malicious script exists in stored comments
     flag = None
     if mode == "vuln" and any("<script" in c.lower() for c in comments):
         flag = FLAGS["stored_xss"]
@@ -209,7 +208,7 @@ def stored_xss_victim():
         flag=flag,
     )
 
-
+# route to clear stored XSS comments
 @lab_bp.route("/lab/stored-xss/clear", methods=["POST"])
 @login_required
 def clear_stored_xss():
@@ -221,7 +220,7 @@ def clear_stored_xss():
         mode = "vuln"
 
     challenge_id = request.args.get("challenge_id", type=int)
-
+    # resets the lab state before redirecting back to the page
     url = f"/lab/stored-xss?mode={mode}"
     if challenge_id:
         url += f"&challenge_id={challenge_id}"

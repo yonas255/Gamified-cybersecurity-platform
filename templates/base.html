@@ -1,42 +1,43 @@
+<!--basic HTML structure, language, character encoding, and responsive view setting-->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<!--dynamic page title using Jinja template blocks-->
 <title>{% block title %}Cybersecurity Platform{% endblock %}</title>
 
+<!--importing external stylesheets including Bootstrap, front Awesome icons, and custom CSS-->
 
-
-<!-- Bootstrap -->
+<!-- Bootstrap Stylesheets-->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 
-<!-- Font Awesome Icons -->
+<!-- Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<!-- Your CSS -->
+<!-- CSS -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
+<!--adding favicone for browser tab branding-->
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
 <body class="bg-page">
-
+<!--applying backgrong styling class to the body-->
 {% if current_user.is_authenticated %}
-<!-- Navbar -->
+<!-- Navbar displaying only for authenticated users and admin-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 <div class="container">
-
+<!--brand/logo section with icone and link to dashboard or Home page-->
 <a class="navbar-brand fw-bold" href="{{ url_for('dashboard') }}">
 <i class="fa-solid fa-shield-halved me-2"></i>CyberSec CTF
 </a>
-
+<!--responsive navbar toggle button for smaller screens-->
 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
 <span class="navbar-toggler-icon"></span>
 </button>
 
 <div class="collapse navbar-collapse" id="nav">
-
+<!--navigation links for dashboard, challenges, leaderboard, about page, and admin-->
 <ul class="navbar-nav me-auto">
 
 <li class="nav-item">
@@ -54,7 +55,7 @@
 <li class="nav-item">
 <a class="nav-link" href="/about">About</a>
 </li>
-
+<!--display logged-in-user information and logout button-->
 {% if current_user.is_admin %}
 <li class="nav-item">
 <a class="nav-link" href="/admin">Admin</a>
@@ -78,7 +79,7 @@ Logout
 </nav>
 {% endif %}
 
-<!-- Header -->
+<!-- Header section showing page title and subheader using dynamic template blocks-->
 <header class="py-4">
 <div class="container">
 <div class="p-4 rounded-4 shadow-sm bg-white bg-opacity-75">
@@ -98,7 +99,7 @@ Learn vulnerabilities safely: vuln vs secure labs
 </header>
 
 
-<!-- Flash messages -->
+<!-- Flash messages system to display temporary alerts such us "error" or "success" -->
 <div id="flashArea">
 
 {% with messages = get_flashed_messages() %}
@@ -122,13 +123,13 @@ Learn vulnerabilities safely: vuln vs secure labs
 </div>
 
 
-<!-- Main content -->
+<!-- Main content area where users pages inject their content -->
 <main class="container pb-5">
 {% block content %}{% endblock %}
 </main>
 
 
-<!-- Footer -->
+<!-- Footer section with project information and educational disclaimer-->
 <footer class="bg-dark text-white-50 py-3 mt-auto">
 <div class="container d-flex justify-content-between small">
 
@@ -143,7 +144,7 @@ Educational use only - safe simulations
 </div>
 </footer>
 
-
+<!-- javascript to enable Bootstrap tooltips after page load-->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
@@ -151,12 +152,12 @@ new bootstrap.Tooltip(el);
 });
 });
 </script>
-
+<!--importing Bootstrap JS nad custom scripts for progress bar, locked level, and flash message handling-->
 <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 
 <script src="{{ url_for('static', filename='js/progress.js') }}"></script>
 <script src="{{ url_for('static', filename='js/locked.js') }}"></script>
 <script src="{{ url_for('static', filename='js/flash.js') }}"></script>
-
+<!--closing the body and HTML document-->
 </body>
 </html>

@@ -1,19 +1,20 @@
-﻿{% extends "base.html" %}
-
+﻿<!--base template with title, header, subheader for managing challenges-->
+{% extends "base.html" %}
 {% block title %}Manage Challenges{% endblock %}
 {% block header %}Manage Challenges{% endblock %}
 {% block subheader %}Admin-only: edit or delete challenges{% endblock %}
-
 {% block content %}
+<!--card layout and navigation bar for creating new challenges-->
 <div class="card shadow-sm">
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <a class="btn btn-dark btn-sm" href="/admin/challenges/new">+ New Challenge</a>
       <a class="btn btn-outline-dark btn-sm" href="/admin">Back</a>
     </div>
-
+    <!--wraps the table in responsive container to make sure proper display on different screen size-->
     <div class="table-responsive">
       <table class="table table-striped align-middle mb-0">
+        <!--table structure with headerdrs for challenge details -->
         <thead>
           <tr>
             <th>ID</th>
@@ -23,16 +24,20 @@
             <th style="width: 180px;">Actions</th>
           </tr>
         </thead>
+        <!--loops through all challenges dynamically using Jinja-->
         <tbody>
           {% for c in challenges %}
           <tr>
+            <!--display challenge details-->
             <td>{{ c.id }}</td>
             <td>{{ c.title }}</td>
             <td>{{ c.difficulty }}</td>
             <td>{{ c.points }}</td>
             <td>
+              <!--providing edit button to update the challenges-->
               <a class="btn btn-outline-dark btn-sm" href="/admin/challenges/{{ c.id }}/edit">Edit</a>
 
+              <!--delete from POST method and confirmed prompt to safely remove the challenge-->
               <form method="POST" action="/admin/challenges/{{ c.id }}/delete" class="d-inline">
                 <button class="btn btn-outline-danger btn-sm" type="submit"
                         onclick="return confirm('Delete this challenge?');">
@@ -41,6 +46,7 @@
               </form>
             </td>
           </tr>
+          <!--close everting including the content block-->
           {% endfor %}
         </tbody>
       </table>

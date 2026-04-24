@@ -1,14 +1,15 @@
+/*setting full hight for HTML and body elements to ensure proper layout scaling*/
 html, body {
     height: 100%;
 }
 
-
+/*configuring the body as a flex container with vertical layout*/
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
-
+/*applying a full screen background image with cover sizing, centered positioning*/
 body.bg-page {
     min-height: 100vh;
     background-image: url("/static/images/pic1.jpg");
@@ -17,12 +18,13 @@ body.bg-page {
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
-
+/*adding a hover animation to cards, slightly lifting them upward with a smooth transition*/
 .card:hover{
 transform: translateY(-4PX);
 transition: 0.2s;
 }
 
+/*defining a glassmorphism-style card with semi-transparent background*/
 .glass-card {
     background: rgba(255,255,255,0.15);
     backdrop-filter: blur(2px);
@@ -30,7 +32,7 @@ transition: 0.2s;
     border-radius: 16px;
 }
 
-/* Optional: slight dark overlay effect */
+/*slight dark overlay effect */
 body.bg-page::before {
     content: "";
     position: fixed;
@@ -38,16 +40,17 @@ body.bg-page::before {
     background: rgba(0,0,0,0.35);
     z-index: 1;
 }
-
+/*main container expands to fill available space*/
 main.container {
     flex: 1;
 }
 
-/* Make cards readable */
+/* rounded corners to card elements for a model UI looks*/
 .card {
     border-radius: 16px;
 }
 
+/*style a quote section with full width, dark background*/
 .quote-section{
     width:100%;
     background:#111;
@@ -55,18 +58,18 @@ main.container {
     text-align:center;
     padding:80px 20px;
 }
-
+/*adjusting paragraphs text inside the quote section for larger and more readable font*/
 .quote-section p{
     font-size:1.5rem;
     font-weight:500;
 }
-
+/*style the footer text the inside the quote section with smaller size and lighter color*/
 .quote-section footer{
     margin-top:10px;
     font-size:0.9rem;
     color:#bbb;
 }
-
+/*positioning the container above the overlay using z-index to ensure content remains visible*/
 .container {
     position: relative;
     z-index: 2;

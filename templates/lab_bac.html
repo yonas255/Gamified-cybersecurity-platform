@@ -1,12 +1,12 @@
+<!--Base template-->
 {% extends "base.html" %}
-
 {% block title %}Broken Access Control Lab{% endblock %}
 {% block header %}Broken Access Control Lab ({{ mode|capitalize }}){% endblock %}
 {% block subheader %}Admin Page · Vulnerable vs Secure{% endblock %}
-
 {% block content %}
-
+<!--content starts here-->
 <div class="d-flex justify-content-between align-items-center mb-3">
+    <!--navigation buttons to switch between vulnerable and secure version of the lab, and optional link back to the challenge-->
     <div>
         <a class="btn btn-danger btn-sm"
         href="/lab/bac?mode=vuln{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
@@ -17,28 +17,30 @@
         Secure
         </a>
     </div>
-
+    <!--link to return to challenge section-->
     {% if challenge_id %}
         <a class="btn btn-light btn-sm fw-bold" href="/challenges/{{ challenge_id }}">
             Back to Challenge →
         </a>
     {% endif %}
     </div>
-
+    <!--create div to display current user role -->
     <div class="card shadow-sm">
         <div class="card-body">
 
             <div class="alert alert-secondary">
                 <div><b>Your role:</b> {% if current_user.is_admin %}admin{% else %}user{% endif %}</div>
+                <!--explaining the concept of Broken ACcess Control-->
                 <div class="text-muted small">
                     Broken Access Control means a restricted page is reachable without proper permission checks.
                 </div>
             </div>
-
+        <!--in secure mode, block access and display error message if user is not authorized-->
         {% if blocked %}
         <div class="alert alert-danger">
             <b>Access denied.</b> This is an admin-only page.
         </div>
+        <!--in vulnerable mode (or authorized access), displays simulated admin panel content-->
         {% else %}
         <div class="border rounded p-3">
             <div class="fw-bold">🔒 Admin Panel (Simulation)</div>
@@ -48,7 +50,7 @@
                     (This should NOT be possible — that’s the vulnerability.)
                 {% endif %}
             </div>
-
+            <!--Highlighting vulnerability by showing that non-admin users can access admin content -->
             <ul class="mb-0">
                 <li>View all users</li>
                 <li>Delete a user</li>
@@ -56,12 +58,13 @@
             </ul>
         </div>
         {% endif %}
-
+        <!--Displaying success message and flag when vulnerability is exploited  -->
         {% if flag %}
         <div class="alert alert-success mt-3">
             <div class="fw-bold">🎉 Success! Admin page accessed as a normal user.</div>
             <div class="small">Copy the flag and submit it on the challenge page.</div>
             <hr class="my-2">
+            <!--Showing the  flag with  copy button for user convenience-->
             <div class="d-flex gap-2 align-items-center">
                 <code class="p-2 bg-light rounded flex-grow-1" id="flagText">{{ flag }}</code>
                 <button class="btn btn-outline-dark btn-sm" type="button" onclick="copyFlag()">Copy</button>
@@ -70,7 +73,7 @@
         {% endif %}
 
         <hr>
-
+        <!--Explaining why the vulnerability works (missing access control check) vs secure behavior -->
         <h5>Why this worked</h5>
         {% if mode == "vuln" %}
         <p class="text-muted">
@@ -81,7 +84,7 @@
             The route checks the user’s role and blocks access unless the user is an admin.
         </p>
         {% endif %}
-
+        <!--Explaining how to fix the vulnerability using proper authorization checks  -->
         <h5 class="mt-3">How it’s fixed</h5>
         <p class="text-muted">
             Enforce authorization checks (example: <code>admin_required</code>) on every sensitive route and action.
@@ -89,7 +92,7 @@
 
     </div>
 </div>
-
+<!--JavaScript -->
 <script>
 function copyFlag() {
     const el = document.getElementById("flagText");
@@ -97,5 +100,5 @@ function copyFlag() {
     navigator.clipboard.writeText(el.innerText).then(() => alert("Flag copied"));
 }
 </script>
-
+<!--Ends content block here-->
 {% endblock %}

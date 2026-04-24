@@ -1,26 +1,28 @@
+<!--this 2FA authentication setup is for future implementation to upgrade or enhance the security-->
 {% extends "base.html" %}
-
 {% block title %}Two-Factor Authentication{% endblock %}
 {% block header %}Two-Factor Authentication (2FA){% endblock %}
 {% block subheader %}Scan the QR code in an authenticator app{% endblock %}
-
 {% block content %}
+<!--main content starts here-->
 <div class="card shadow-sm">
     <div class="card-body">
-
+        <!--display status message showing 2FA is currently enabled or not-->
         {% if enabled %}
+            <!-- 2FA enabled-->
             <div class="alert alert-success">2FA is enabled on your account.</div>
         {% else %}
+            <!--Disabled-->
             <div class="alert alert-warning">2FA is not enabled yet. Scan then verify in the next step.</div>
         {% endif %}
-
+        <!--form for disabling the 2FA-->
         {% if enabled %}
         <form method="POST" action="{{ url_for('account.disable_2fa') }}">
             <button class="btn btn-danger">Disable 2FA</button>
         </form>
         {% endif %}
 
-
+        <!--QR code-->
         {% if not enabled %}
         <div class="mb-3">
             <img class="img-fluid border rounded" style="max-width: 280px;"
@@ -28,7 +30,7 @@
         </div>
         {% endif %}
 
-
+        <!--form for entering the 6-digit vertification code from the authenticator app to enable app-->
         {% if not enabled %}
         <form method="POST" action="{{ url_for('account.verify_2fa') }}" class="mt-3">
             <label class="form-label">Enter 6-digit code</label>
@@ -37,7 +39,7 @@
         </form>
         {% endif %}
 
-
+        <!--provides a manual secret key as a fallback in case QR code scanning fails-->
         {% if not enabled %}
         <div class="mb-3">
             <label class="form-label">Manual secret (if QR scan fails)</label>
@@ -45,10 +47,11 @@
         </div>
         {% endif %}
 
-
+        <!--instruction to guide the user on how to use authentication-->
         <p class="text-muted small mb-0">
             Use Google Authenticator / Auth and add a new account by scanning the QR code.
         </p>
     </div>
 </div>
+<!--Closes layout and ends content block-->
 {% endblock %}

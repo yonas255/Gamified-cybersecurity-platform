@@ -1,22 +1,25 @@
-import bcrypt
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_required, current_user
+import bcrypt # library for hashing
+from flask import Blueprint, render_template, request, redirect, url_for, flash # flask routing
+from flask_login import login_required, current_user # authentication
 
-from models import db
+from models import db # databese models
 from models.challenge import Challenge
 from models.submission import Submission
 from models.user import User
-from rate_limiter import check
+from rate_limiter import check # rate limiting
 
+# creating a blueprint for challenge based routes 
 challenge_bp = Blueprint("challenges", __name__)
 
+# retrieving all correctly completed challenges IDs for a exact user to track progress
 def completed_ids_for_user(user_id: int) -> set[int]:
     subs = Submission.query.filter_by(user_id=user_id, is_correct=True).all()
     return {s.challenge_id for s in subs}
 
-
+# unlocking logic for challenges depends on difficulty levels
+# ensuring users completed beginner and medium levels befor approaching the harder level while allowing admin full access
 def is_unlocked(challenge: Challenge, done_ids: set[int]) -> bool:
-    # ✅ Admin can access everything
+    # allowing Admin to access everything
     if current_user.is_authenticated and getattr(current_user, "is_admin", False):
         return True
 
@@ -35,7 +38,7 @@ def is_unlocked(challenge: Challenge, done_ids: set[int]) -> bool:
         return beginner_done and medium_done
     return True
 
-
+# displaying all challenges, marking each as completed or locked or unlocked depends on the user progress
 @challenge_bp.route("/challenges")
 @login_required
 def list_challenges():
@@ -52,7 +55,11 @@ def list_challenges():
 
     return render_template("challenges.html", rows=rows)
 
-
+# managing viewing and submitting a specific challenge
+# enforcing access control, applies rate limiting on submissions,
+# verifying the flag using hashing, logs the attempts
+# updates user points if correct
+# providing feedback messages before saving to the database
 @challenge_bp.route("/challenges/<int:challenge_id>", methods=["GET", "POST"])
 @login_required
 def challenge_detail(challenge_id):
@@ -79,14 +86,14 @@ def challenge_detail(challenge_id):
             challenge.flag_hash.encode("utf-8")
         )
 
-        # ✅ Check BEFORE inserting a new submission (avoids autoflush bug)
+        #  Checking before inserting a new submission (avoids auto flush bug)
         already_correct = Submission.query.filter_by(
             user_id=current_user.id,
             challenge_id=challenge.id,
             is_correct=True
         ).first()
 
-        # log submission (for audit trail)
+        # logging submission for audit
         sub = Submission(
             user_id=current_user.id,
             challenge_id=challenge.id,

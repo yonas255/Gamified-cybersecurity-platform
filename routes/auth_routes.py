@@ -1,16 +1,18 @@
-import bcrypt
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import current_user, login_user, logout_user, login_required
-from audit import audit
-from models import db
-from models.user import User
-import time
-import re
+import bcrypt # libraries for hashing
+from flask import Blueprint, render_template, request, redirect, url_for, flash # flask routing
+from flask_login import current_user, login_user, logout_user, login_required # authentication
+from audit import audit # for logs
+from models import db # for database access
+from models.user import User # validation
+import time # time handling
+import re # 2FA
 import pyotp
-from flask import session
+from flask import session # Session management
 
+# creating a blueprint for authentication-related routes.
 auth_bp = Blueprint("auth", __name__)
 
+# handling the user registration, with input validation(email format and length ) password policy enforcement,duplicate checks,password hashing, and saving the new user to the database.
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -27,7 +29,7 @@ def register():
             return redirect(url_for("auth.register"))
 
         
-        # ✅ Password policy
+        #  Password policy
         if len(password) < 10:
             flash("Password must be at least 10 characters.")
             return redirect(url_for("auth.register"))
@@ -61,13 +63,17 @@ def register():
 
         db.session.add(user)
         db.session.commit()
-
+        # flash message
         flash("Account created! Please login.")
         return redirect(url_for("auth.login"))
 
     return render_template("register.html")
 
-
+# managing user login by verifying credentials
+# handling account lockout after multiple failed attempts,
+# logging activity
+# enforcing 2FA if enabled
+# redirecting users based on their role.
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -112,7 +118,7 @@ def login():
 
             return redirect(url_for("auth.login"))
         
-        # Enforce 2FA
+        # Enforcing 2FA
         if user.totp_enabled:
             session["2fa_user_id"] = user.id
             return redirect(url_for("auth.twofa_login"))
@@ -130,6 +136,10 @@ def login():
 
     return render_template("login.html")
 
+# managing the second step of login when 2FA is enabled
+# verifying the authentication code
+# logs the result
+# grants access if successful
 @auth_bp.route("/login/2fa", methods=["GET", "POST"])
 def twofa_login():
     user_id = session.get("2fa_user_id")
@@ -155,6 +165,8 @@ def twofa_login():
 
     return render_template("login_2fa.html")
 
+# logging out the user, records the action
+# redirects them to the login page
 @auth_bp.route("/logout")
 @login_required
 def logout():

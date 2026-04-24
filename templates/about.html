@@ -1,18 +1,18 @@
+<!--extending the base template and all required layout-->
 {% extends "base.html" %}
-
 {% block title %}About{% endblock %}
 {% block header %}About This Platform{% endblock %}
 {% block subheader %}Gamified Cybersecurity Training Environment{% endblock %}
 
 {% block content %}
 
-<!-- Project intro -->
+<!-- starts main content page here -->
 <div class="card shadow-sm p-4 mb-4">
 
     <div class="row">
-
+        <!--left column provid info about the platform and learning objectives-->
         <div class="col-md-8">
-
+            <!--overview section explaining purpose of the platform and key cybersecurity topics covered-->
             <h4>Project Overview</h4>
 
             <p class="text-muted">
@@ -20,7 +20,6 @@
                 designed to help students learn common web vulnerabilities
                 in a safe and controlled environment.
             </p>
-
             <p class="text-muted">
                 Users practice exploiting vulnerabilities such as SQL Injection,
                 Cross-Site Scripting (XSS), Cross-Site Request Forgery (CSRF),
@@ -28,7 +27,7 @@
             </p>
 
         </div>
-
+        <!--right column display project info such as developer, technologies, and purpose-->
         <div class="col-md-4">
 
             <div class="border rounded p-3 bg-light">
@@ -50,11 +49,11 @@
 
 </div>
 
-
+<!--feature section highlighting core platform functionality-->
 <div class="card shadow-sm p-4 mb-4">
 
     <div class="row text-center">
-
+        <!--describing hands-on vulnerability simulation for practical cybersecurity learnings-->
         <div class="col-md-4">
             <h5>⚡ Vulnerability Labs</h5>
             <p class="text-muted">
@@ -62,7 +61,7 @@
                 using realistic but safe simulations.
             </p>
         </div>
-
+        <!--explaining secure coding comparison to show how vulnerability are fixed-->
         <div class="col-md-4">
             <h5>🛡 Secure Coding</h5>
             <p class="text-muted">
@@ -70,7 +69,7 @@
                 demonstrates how developers fix the vulnerability.
             </p>
         </div>
-
+        <!--highlights gamification features like challenges, progress tracking, and leaderboard-->
         <div class="col-md-4">
             <h5>🏆 Gamified Learning</h5>
             <p class="text-muted">
@@ -82,9 +81,9 @@
     </div>
 
 </div>
-
+<!--closing main content container-->
 </main>
-
+<!--quote section-->
 <section class="quote-section text-center">
 
     <div class="container py-5">
@@ -103,6 +102,6 @@
     </div>
 
 </section>
-
+<!-- reopens main container for purpose of footer layout and ends block-->
 <main class="container pb-5">
 {% endblock %}

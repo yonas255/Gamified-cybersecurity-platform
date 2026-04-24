@@ -1,19 +1,28 @@
-﻿from flask import Blueprint, render_template
-from flask_login import current_user, login_required
-from decorators import admin_required
-import bcrypt
+﻿# importing Flask tools
+from flask import Blueprint, render_template
+from flask_login import current_user, login_required # authentication utilities
+from decorators import admin_required # admin access decorator
+import bcrypt # encryption library
 from flask import request, redirect, url_for, flash
-from models import db
+from models import db # database models
 from models.challenge import Challenge
-from audit import audit
+from audit import audit # audit logging function
+
+# creating an admin blueprint to group all admin-related routes under /admin
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
+# defining the admin dashboard route
+# accessible only to logged-in user with admin privileges
 @admin_bp.route("/")
 @login_required
 @admin_required
 def dashboard():
     return render_template("admin/admin_dashboard.html")
 
+# managing creation of new challenges, with form data retrieval, validation, 
+# secure hashing of the flag
+# saving the database
+# logging the action
 @admin_bp.route("/challenges/new", methods=["GET", "POST"])
 @login_required
 @admin_required
@@ -27,12 +36,12 @@ def create_challenge():
 
         flag_plain = request.form.get("flag", "").strip()
 
-        # ✅ Validate first
+        # Validating first
         if not title or not description or not flag_plain:
             flash("Title, description, and flag are required.")
             return redirect(url_for("admin.create_challenge"))
 
-        # ✅ Hash the flag before saving
+        # Hashing the flag before saving
         flag_hash = bcrypt.hashpw(
             flag_plain.encode("utf-8"),
             bcrypt.gensalt()
@@ -56,7 +65,7 @@ def create_challenge():
 
     return render_template("admin/challenge_create.html")
 
-
+# retrieving and displaying all challenges in descending order for admin management
 @admin_bp.route("/challenges")
 @login_required
 @admin_required
@@ -64,6 +73,11 @@ def manage_challenges():
     challenges = Challenge.query.order_by(Challenge.id.desc()).all()
     return render_template("admin/challenge_manage.html", challenges=challenges)
 
+# allowing  admins to edit existing challenge
+# updating the fields
+# optionally re-hash a new flag
+# save changes
+# log the update action
 @admin_bp.route("/challenges/<int:challenge_id>/edit", methods=["GET", "POST"])
 @login_required
 @admin_required
@@ -88,6 +102,8 @@ def edit_challenge(challenge_id):
 
     return render_template("admin/challenge_edit.html", c=c)
 
+# handling deletion of the challenge from the database
+# logs the deletion activities
 @admin_bp.route("/challenges/<int:challenge_id>/delete", methods=["POST"])
 @login_required
 @admin_required

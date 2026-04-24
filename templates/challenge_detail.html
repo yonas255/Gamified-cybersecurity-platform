@@ -1,22 +1,21 @@
-﻿{% extends "base.html" %}
-
+﻿<!--base template sets required layout using challenge data-->
+{% extends "base.html" %}
 {% block title %}Challenge{% endblock %}
 {% block header %}{{ challenge.title }}{% endblock %}
 {% block subheader %}{{ challenge.difficulty }} · {{ challenge.points }} pts{% endblock %}
-
 {% block content %}
-
+<!--main content starts here-->
 <div class="card shadow-sm mb-3">
   <div class="card-body">
     <p class="mb-3">{{ challenge.description }}</p>
-
+    <!--SQL Injection (Beginner) section: -->
     {% if challenge.lab_type == "sqli" %}
       <div class="alert alert-secondary mb-3">
         <div class="fw-bold mb-2">🎯 Goal</div>
         <div>Log in as <b>admin</b> in the vulnerable lab and reveal the <b>flag</b>.</div>
 
         <hr class="my-2">
-
+        <!--providing structured learning with goal steps, and progressive hints for exploitation-->
         <div class="fw-bold mb-2">Steps</div>
         <ol class="mb-2">
           <li>Click <b>Open SQLi Lab (Vulnerable)</b></li>
@@ -41,14 +40,14 @@
         </details>
       </div>
     {% endif %}
-
+    <!--reflected XSS section: -->
     {% if challenge.lab_type == "xss" %}
       <div class="alert alert-secondary mb-3">
         <div class="fw-bold mb-2">🎯 Goal</div>
         <div>Trigger a <b>Reflected XSS</b> in the vulnerable lab and reveal the <b>flag</b>.</div>
 
         <hr class="my-2">
-
+        <!--guides user through executing client-side script injection and understanding how the browser perform-->
         <div class="fw-bold mb-2">Steps</div>
         <ol class="mb-2">
           <li>Click <b>Open XSS Lab (Vulnerable)</b></li>
@@ -77,14 +76,14 @@
         </details>
       </div>
     {% endif %}
-
+    <!--stored XSS section-->
     {% if challenge.lab_type == "stored_xss" %}
       <div class="alert alert-secondary mb-3">
         <div class="fw-bold mb-2">🎯 Goal</div>
         <div>Store a malicious comment in the vulnerable lab so it executes when the page reloads, then reveal the <b>flag</b>.</div>
 
         <hr class="my-2">
-
+        <!--explaining persistent injection where payload is stored and executed on page reload-->
         <div class="fw-bold mb-2">Steps</div>
         <ol class="mb-2">
           <li>Click <b>Open Stored XSS Lab (Vulnerable)</b></li>
@@ -115,7 +114,7 @@
       </div>
     {% endif %}
 
-    
+    <!--IDOR section-->
     {% if challenge.lab_type == "idor" %}
       <div class="alert alert-secondary mb-3">
         <div class="fw-bold mb-2">🎯 Goal</div>
@@ -124,7 +123,7 @@
         </div>
 
         <hr class="my-2">
-
+        <!--demonstrating insecure direct object reference by manipulating URL parameters to access unauthorized data-->
         <div class="fw-bold mb-2"> Steps</div>
         <ol class="mb-2">
           <li>Click <b>Open IDOR Lab (Vulnerable)</b></li>
@@ -155,7 +154,7 @@
         </details>
       </div>
     {% endif %}
-    
+    <!--SQL injection (Admin Bypass) section-->
     {% if challenge.lab_type == "sqli_admin" %}
   <div class="alert alert-secondary mb-3">
     <div class="fw-bold mb-2">🎯 Goal</div>
@@ -164,7 +163,7 @@
     </div>
 
     <hr class="my-2">
-
+    <!--focuses on targeting specific privileged data (admin account)-->
     <div class="fw-bold mb-2"> Steps</div>
     <ol class="mb-2">
       <li>Click <b>Open SQLi Lab (Vulnerable)</b></li>
@@ -195,14 +194,14 @@
     </details>
   </div>
 {% endif %}
-
+<!--CSRF section-->
 {% if challenge.lab_type == "csrf" %}
   <div class="alert alert-secondary mb-3">
     <div class="fw-bold mb-2">🎯 Goal</div>
     <div>Trigger an unauthorized state-changing request in the <b>Vulnerable</b> lab and reveal the <b>flag</b>.</div>
 
     <hr class="my-2">
-
+    <!--demonstrate how unauthorized actions can be triggered without user consent and explains token-based protection-->
     <div class="fw-bold mb-2"> Steps</div>
     <ol class="mb-2">
       <li>Open <b>CSRF Lab (Vulnerable)</b></li>
@@ -223,7 +222,7 @@
     </details>
   </div>
 {% endif %}
-
+<!--Bac(Broken Access Control) section -->
 {% if challenge.lab_type == "bac" %}
   <div class="alert alert-secondary mb-3">
     <div class="fw-bold mb-2">🎯 Goal</div>
@@ -232,7 +231,7 @@
     </div>
 
     <hr class="my-2">
-
+    <!--shows how missing permission checks allow unauthorized access to admin only resources-->
     <div class="fw-bold mb-2">Steps</div>
     <ol class="mb-2">
       <li>Click <b>Open BAC Lab (Vulnerable)</b></li>
@@ -242,19 +241,19 @@
       <li>Secure should show <b>Access denied</b></li>
       <li>Come back here and submit the flag</li>
     </ol>
-
+    <!--hint section-->
     <div class="fw-bold mb-2">Hint 1</div>
     <div>
       Broken Access Control means the app forgets to check permissions before showing sensitive pages.
     </div>
-
+    <!--hint 2-->
     <details class="mt-2 mb-2">
       <summary class="fw-bold">Hint 2 (click)</summary>
       <div class="mt-2">
         In the secure version, only <b>admin</b> should access the page.
       </div>
     </details>
-
+    <!--hint 3-->
     <details>
       <summary class="fw-bold">Hint 3 (click)</summary>
       <div class="mt-2">
@@ -264,49 +263,50 @@
   </div>
 {% endif %}
 
-    {# ---------------- Lab links ---------------- #}
+    {# ------section divider for lab navigation links ---- #}
     {% if challenge.lab_type and challenge.lab_type != "none" %}
-      <div class="mb-3">
-
+    <!--dynamically generates lab access buttons based on challenge type, linking to vuln and secure version-->
+    <div class="mb-3">
+        <!--SQL injection links-->
         {% if challenge.lab_type == "sqli" %}
           <a class="btn btn-danger btn-sm"
               href="/lab/sqli?mode=vuln&challenge_id={{ challenge.id }}">Open SQLi Lab (Vulnerable)</a>
           <a class="btn btn-success btn-sm"
               href="/lab/sqli?mode=secure&challenge_id={{ challenge.id }}">Open Secure Version</a>
 
-
+        <!--XSS links-->
         {% elif challenge.lab_type == "xss" %}
           <a class="btn btn-danger btn-sm"
               href="/lab/xss?mode=vuln&challenge_id={{ challenge.id }}">Open XSS Lab (Vulnerable)</a>
           <a class="btn btn-success btn-sm"
               href="/lab/xss?mode=secure&challenge_id={{ challenge.id }}">View Secure Version</a>
-
+        <!--SQL Admin Bypass-->
         {% elif challenge.lab_type == "sqli_admin" %}
           <a class="btn btn-danger btn-sm"
             href="/lab/sqli?mode=vuln&challenge_id={{ challenge.id }}">Open SQLi Lab (Vulnerable)</a>
           <a class="btn btn-success btn-sm"
             href="/lab/sqli?mode=secure&challenge_id={{ challenge.id }}">Open Secure Version</a>
 
-              
+        <!--Stored XSS links-->
         {% elif challenge.lab_type == "stored_xss" %}
           <a class="btn btn-danger btn-sm"
               href="/lab/stored-xss?mode=vuln&challenge_id={{ challenge.id }}">Open Stored XSS Lab (Vulnerable)</a>
           <a class="btn btn-success btn-sm"
               href="/lab/stored-xss?mode=secure&challenge_id={{ challenge.id }}">View Secure Version</a>
-
+        <!--IDOR links include user ID parameter to simulate direct object manipulation vuln-->
         {% elif challenge.lab_type == "idor" %}
-          {# keep uid param AND challenge_id #}
+          <!--keep uid param AND challenge_id -->
           <a class="btn btn-danger btn-sm"
               href="/lab/idor?mode=vuln&uid=1&challenge_id={{ challenge.id }}">Open IDOR Lab (Vulnerable)</a>
           <a class="btn btn-success btn-sm"
               href="/lab/idor?mode=secure&uid=1&challenge_id={{ challenge.id }}">View Secure Version</a>
-
+        <!--CSRF links-->
         {% elif challenge.lab_type == "csrf" %}
           <a class="btn btn-danger btn-sm"
               href="/lab/csrf?mode=vuln&challenge_id={{ challenge.id }}">Open CSRF Lab (Vulnerable)</a>
           <a class="btn btn-success btn-sm"
               href="/lab/csrf?mode=secure&challenge_id={{ challenge.id }}">Open Secure Version</a>
-
+        <!--Bac links-->
         {% elif challenge.lab_type == "bac" %}
           <a class="btn btn-danger btn-sm"
               href="/lab/bac?mode=vuln&challenge_id={{ challenge.id }}">Open BAC Lab (Vulnerable)</a>
@@ -318,23 +318,25 @@
       </div>
     {% endif %}
 
-    {# ---------------- Flag submit ---------------- #}
+    {# ---- section diverder for flag submission ---- #}
     {% if not current_user.is_admin %}
+    <!--allows users to submit flags for validation and scoring-->
       <div class="fw-bold mb-2">🏁 Submit your flag</div>
       <form method="POST" class="d-flex gap-2">
         <input class="form-control" name="flag" placeholder="Enter flag" required />
         <button class="btn btn-dark" type="submit">Submit Flag</button>
       </form>
     {% else %}
+      <!--block admins from submitting flags to maintain the fairness-->
       <div class="alert alert-info mb-0">
         Admin view — flag submission disabled.
       </div>
     {% endif %}
-
+    <!--navigation to return to challenge list-->
     <div class="mt-3">
       <a class="link-secondary" href="/challenges">← Back to Challenges</a>
     </div>
   </div>
 </div>
-
+<!--closes layout and ends content block-->
 {% endblock %}

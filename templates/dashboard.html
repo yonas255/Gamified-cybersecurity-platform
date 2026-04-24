@@ -1,17 +1,17 @@
+<!--extending the base html for the layout-->
 {% extends "base.html" %}
-
 {% block title %}Dashboard{% endblock %}
 {% block header %}Dashboard{% endblock %}
 {% block subheader %}Practice real cybersecurity vulnerabilities safely{% endblock %}
-
 {% block content %}
-
+<!--content starts here-->
+<!--student progress only for non-admin users-->
 {% if not current_user.is_admin %}
 <div class="card shadow-sm mb-4">
     <div class="card-body">
 
         <h5 class="mb-3">Your Progress</h5>
-
+        <!--shows animated progress bar using completed challenge percentage-->
         <div class="progress" style="height:22px;">
             <div
                 id="progressBar"
@@ -24,7 +24,7 @@
                 {{ percent }}%
             </div>
         </div>
-
+        <!--displaying completed challenges count against total challenges-->
         <small class="text-muted d-block mt-2">
             {{ completed }} / {{ total }} challenges completed
         </small>
@@ -35,13 +35,13 @@
 
 
 <div class="row g-4 mb-4">
-
+    <!--SQL injection learning card explaining the vuln and linking to related labs-->
     <div class="col-md-6">
         <div class="card shadow-sm h-100">
             <div class="card-body">
-
+                <!--header-->
                 <h4> SQL Injection</h4>
-
+                <!--description-->
                 <p class="text-muted">
                     SQL Injection occurs when user input is directly inserted into a database query.
                     Attackers can manipulate the query to bypass authentication or retrieve sensitive data.
@@ -60,13 +60,13 @@
         </div>
     </div>
 
-
+    <!--XSS learning card explaining reflected or stored XSS and linking to related labs-->
     <div class="col-md-6">
         <div class="card shadow-sm h-100">
             <div class="card-body">
-
+                <!--header-->
                 <h4> Cross-Site Scripting (XSS)</h4>
-
+                <!--description-->
                 <p class="text-muted">
                     Cross-Site Scripting allows attackers to inject malicious JavaScript
                     into web pages viewed by other users.
@@ -89,13 +89,13 @@
 
 
 <div class="row g-4">
-
+    <!--Access control card introducing IDOR and Broken Access Control labs-->
     <div class="col-md-6">
         <div class="card shadow-sm h-100">
             <div class="card-body">
-
+                <!--header-->
                 <h4>Access Control Vulnerabilities</h4>
-
+                <!--description-->
                 <p class="text-muted">
                     Access control vulnerabilities occur when applications fail
                     to properly restrict what authenticated users are allowed to do.
@@ -114,13 +114,13 @@
         </div>
     </div>
 
-
+    <!--Secure coding card showing how vuln labs are completed with secure implementations-->
     <div class="col-md-6">
         <div class="card shadow-sm h-100">
             <div class="card-body">
-
+                <!--header-->
                 <h4> Secure Coding Concepts</h4>
-
+                <!--description-->
                 <p class="text-muted">
                     Every vulnerable lab includes a secure implementation
                     that demonstrates how developers properly fix the vulnerability.
@@ -130,7 +130,7 @@
                     The goal of this platform is not only to exploit vulnerabilities
                     but also to understand how secure software development prevents them.
                 </p>
-
+                <!--button link-->
                 <a href="/challenges" class="btn btn-dark btn-sm">
                     Explore Challenges
                 </a>
@@ -141,7 +141,7 @@
 
 </div>
 </main>
-
+<!--Quote section for visual design-->
 <section class="quote-section text-center">
 
     <div class="container py-5">
@@ -151,7 +151,7 @@
             <p class="mb-3 fs-4">
                 “Security is not a product, but a process.”
             </p>
-
+            <!-- - - Footer Section for the Quote - - -->
             <footer class="blockquote-footer text-white-50">
                 Bruce Schneier
             </footer>
@@ -160,7 +160,7 @@
     </div>
 
 </section>
-
+<!--reopen the main container for visual design and close the content block-->
 <main class="container pb-5">
 {% endblock %}
 
