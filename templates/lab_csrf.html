@@ -1,11 +1,12 @@
+<!--extend the base Template-->
 {% extends "base.html" %}
-
 {% block title %}CSRF Lab{% endblock %}
 {% block header %}CSRF Lab ({{ mode|capitalize }}){% endblock %}
 {% block subheader %}Attacker Page · Vulnerable vs Secure{% endblock %}
-
 {% block content %}
 
+<!--content starts here-->
+<!--provides buttons to switch between vulnerable and secure version of the CSRF lab-->
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div class="d-flex gap-2 flex-wrap">
         <a class="btn btn-danger btn-sm"
@@ -17,14 +18,14 @@
             Secure
         </a>
     </div>
-
+    <!--button to return to challenge page-->
     {% if challenge_id %}
         <a class="btn btn-light btn-sm fw-bold" href="/challenges/{{ challenge_id }}">
             Back to Challenge →
         </a>
     {% endif %}
 </div>
-
+<!--explanation of the attacker page simulating a malicious website-->
 <div class="card shadow-sm">
     <div class="card-body">
 
@@ -34,36 +35,36 @@
                 This page simulates a malicious website that secretly sends a request while you are logged in.
             </div>
         </div>
-
+    <!--explaining forged request succeeded-->
     <p class="text-muted mb-2">
         If the target site has no CSRF protection, the forged request will succeed.
     </p>
-
+    <!--simulates a malicious form that sends a hidden request to the victim endpoint-->
     <div class="border rounded p-3">
         <div class="fw-bold mb-2">Malicious action:</div>
         <div class="text-muted small mb-2">
             “Change victim’s email to attacker@example.com”
         </div>
 
-        <!-- forged request -->
+        <!-- Hidden input representing the attacker's intended action/ changing victim's email-->
         <form method="POST"
                 action="/lab/csrf/victim?mode={{ mode }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
             <input type="hidden" name="new_email" value="attacker@example.com">
 
-            {# secure mode demo: token required; attacker doesn't have it #}
+            <!--in secure mode demo: token required; attacker doesn't have it-->
             {% if mode == "secure" %}
             <input type="hidden" name="csrf_token" value="">
             <div class="alert alert-warning small mb-2">
                 Secure mode expects a CSRF token. The attacker page cannot generate a valid token.
             </div>
             {% endif %}
-
+            <!--button to trigger the attack-->
             <button class="btn btn-dark" type="submit">Launch Attack</button>
         </form>
     </div>
 
         <hr>
-
+        <!--Explaining why the attack works in vuln mode and why it fails in secure mode-->
         <h5>Why this works</h5>
         {% if mode == "vuln" %}
             <p class="text-muted">
@@ -75,7 +76,7 @@
                 The server requires a CSRF token. Without a valid token, forged requests are blocked.
             </p>
         {% endif %}
-
+        <!--correct mitigation using CSRF Token-->
         <h5 class="mt-3">How it’s fixed</h5>
             <p class="text-muted">
             Use CSRF tokens for all state-changing requests (POST/PUT/DELETE). The token must be tied to the user session
@@ -84,5 +85,5 @@
 
     </div>
 </div>
-
+<!--content ends here-->
 {% endblock %}

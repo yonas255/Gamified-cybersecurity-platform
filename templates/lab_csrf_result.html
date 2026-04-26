@@ -1,31 +1,32 @@
+<!--base template-->
 {% extends "base.html" %}
-
 {% block title %}CSRF Result{% endblock %}
 {% block header %}CSRF Result ({{ mode|capitalize }}){% endblock %}
 {% block subheader %}Victim Endpoint · What the target site accepted{% endblock %}
-
 {% block content %}
 
+<!--content starts here-->
+<!--providing navigation back to the CSRF attacker page and the main challenge page -->
 <div class="d-flex justify-content-between align-items-center mb-3">
     <a class="btn btn-outline-dark btn-sm"
         href="/lab/csrf?mode={{ mode }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
         ← Back to Attacker Page
     </a>
-
+    <!--Button-->
     {% if challenge_id %}
         <a class="btn btn-light btn-sm fw-bold" href="/challenges/{{ challenge_id }}">
             Back to Challenge →
         </a>
     {% endif %}
 </div>
-
+<!--display the result message showing whether the victim request was accepted or blocked-->
 <div class="card shadow-sm">
     <div class="card-body">
 
         {% if message %}
         <div class="alert alert-info">
             {{ message }}
-
+            <!--Shows the email value submitted in the simulated CSRF request-->
             {% if request.form.get("new_email") %}
                 <div class="small mt-2">
                     Target email attempted:
@@ -34,9 +35,10 @@
             {% endif %}
         </div>
         {% endif %}
-
+        <!--show the flag when the CSRF attack succeeds in vulnerable mode-->
         {% if flag %}
         <div class="alert alert-success">
+            <!--Shows flag text with a copy button for easier submission-->
             <div class="fw-bold">🏁 Flag</div>
             <div class="d-flex gap-2 align-items-center mt-1">
                 <code class="p-2 bg-light rounded flex-grow-1" id="flagText">{{ flag }}</code>
@@ -46,7 +48,7 @@
         {% endif %}
 
         <hr>
-
+        <!--explaining the key learning point: CSRF tricks a logged-in browser into sending unwanted request-->
         <h5>What to learn</h5>
         <p class="text-muted">
             CSRF is about tricking a logged-in user’s browser to send a request they didn’t intend.
@@ -55,7 +57,7 @@
 
     </div>
 </div>
-
+<!--javaScript function that copies the flag text to the clipboard-->
 <script>
 function copyFlag() {
     const el = document.getElementById("flagText");
@@ -63,5 +65,5 @@ function copyFlag() {
     navigator.clipboard.writeText(el.innerText).then(() => alert("Flag copied"));
     }
 </script>
-
+<!--content ends here-->
 {% endblock %}

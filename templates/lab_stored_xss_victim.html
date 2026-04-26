@@ -1,18 +1,17 @@
+<!--base template-->
 {% extends "base.html" %}
-
 {% block title %}Victim View{% endblock %}
 {% block header %}Victim View{% endblock %}
 {% block subheader %}Stored XSS Simulation · {{ mode|capitalize }} Mode{% endblock %}
-
 {% block content %}
-
+<!--content starts here-->
 <div class="d-flex justify-content-between align-items-center mb-3">
-
+    <!--providing navigation back to the attacker view and return to challenge page-->
     <a class="btn btn-light btn-sm fw-bold"
         href="/lab/stored-xss?mode={{ mode }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
         ← Back to Attacker View
     </a>
-
+    <!--button to return to challenge view-->
     {% if challenge_id %}
         <a class="btn btn-light btn-sm fw-bold" href="/challenges/{{ challenge_id }}">
             Back to Challenge →
@@ -22,25 +21,27 @@
 
 <div class="card shadow-sm">
     <div class="card-body">
-
+        <!--card explaining that this page simulates another user viewing stored comment-->
         <div class="alert alert-secondary">
             👤 <b>Victim View:</b> This simulates another user loading the page.
         </div>
 
         <h5>💬 Comments</h5>
-
+        <!--loops through stored comments and displays them differently depending on lab mode-->
         {% if comments and comments|length > 0 %}
             {% for c in comments %}
-                {% if mode == "vuln" %}
+            <!--in vulnerable mode, renders comments content as safe HTML, allowing stored XSS to execute-->
+            {% if mode == "vuln" %}
                     <div class="border rounded p-2 mb-2">{{ c | safe }}</div>
-                {% else %}
+            <!--escapes the comment content for secure mode-->
+                    {% else %}
                 <div class="border rounded p-2 mb-2">{{ c }}</div>
             {% endif %}
             {% endfor %}
         {% else %}
             <div class="text-muted">No comments yet.</div>
         {% endif %}
-
+        <!--displays success message and flag when stored XSS executes in vulnerable mode-->
         {% if flag %}
             <div class="alert alert-success mt-3">
                 🎉 <b>Stored XSS executed on victim!</b>
@@ -54,7 +55,7 @@
 
     </div>
 </div>
-
+<!--JavaScript function here-->
 <script>
 function copyFlag() {
     const el = document.getElementById("flagText");
@@ -64,5 +65,5 @@ function copyFlag() {
     });
 }
 </script>
-
+<!--Content ends here-->
 {% endblock %}

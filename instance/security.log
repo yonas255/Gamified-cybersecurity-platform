@@ -122,3 +122,6 @@
 2026-03-19T23:11:55.166784 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}
 2026-03-20T00:37:29.157404 | LOGOUT | user=anonymous | extra=None
 2026-03-20T00:37:39.794998 | LOGIN_SUCCESS | user=yonas1 | extra={'ip': '127.0.0.1'}
+2026-03-20T11:23:35.574296 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-03-20T11:26:40.873363 | LOGOUT | user=anonymous | extra=None
+2026-03-20T11:27:14.339801 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}

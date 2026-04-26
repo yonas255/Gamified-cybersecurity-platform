@@ -1,12 +1,12 @@
+<!--Base template-->
 {% extends "base.html" %}
-
 {% block title %}Stored XSS Lab{% endblock %}
 {% block header %}Stored XSS Lab{% endblock %}
 {% block subheader %}Attacker View · {{ mode|capitalize }} Mode{% endblock %}
-
 {% block content %}
-
+<!--content starts here-->
 <div class="d-flex justify-content-between align-items-center mb-3">
+    <!--providing controls to switch lab mode, clear, and open the victim view-->
     <div class="d-flex gap-2 flex-wrap">
 
         <a class="btn btn-danger btn-sm"
@@ -18,27 +18,27 @@
             href="/lab/stored-xss?mode=secure{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
             Secure
         </a>
-
+        <!--clear form-->
         <form method="POST"
                 action="/lab/stored-xss/clear?mode={{ mode }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}"
                 class="d-inline">
             <button class="btn btn-outline-danger btn-sm" type="submit">Clear</button>
         </form>
-
+        <!--opens victim view to test payloads execute-->
         <a class="btn btn-dark btn-sm fw-bold"
             href="/lab/stored-xss/victim?mode={{ mode }}{% if challenge_id %}&challenge_id={{ challenge_id }}{% endif %}">
             👤 View as Victim
         </a>
 
     </div>
-
+    <!--navigation bar to challenge page-->
     {% if challenge_id %}
         <a class="btn btn-light btn-sm fw-bold" href="/challenges/{{ challenge_id }}">
             Back to Challenge →
         </a>
     {% endif %}
 </div>
-
+<!--explaining the attacker workflow-->
 <div class="card shadow-sm">
     <div class="card-body">
 
@@ -46,12 +46,13 @@
         <b>Attacker View:</b> Post a comment. Then click
         <b>View as Victim</b> to see if it executes.
         </div>
-
+        <!--form for posting a new stored comment-->
         <form method="POST" class="d-flex gap-2 mb-3">
         <input class="form-control" name="comment" placeholder="Write a comment" required>
         <button class="btn btn-dark" type="submit">Post</button>
         </form>
 
+        <!--displaying stored comments if available, if not shows a fallback message-->
         <h5>💬 Stored Comments</h5>
 
         {% if comments and comments|length > 0 %}
@@ -65,5 +66,5 @@
 
     </div>
 </div>
-
+<!--content ends here-->
 {% endblock %}

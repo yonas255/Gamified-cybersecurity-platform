@@ -1,11 +1,11 @@
+<!--Base template-->
 {% extends "base.html" %}
-
 {% block title %}IDOR Lab{% endblock %}
 {% block header %}IDOR Lab ({{ mode|capitalize }}){% endblock %}
 {% block subheader %}Vulnerable vs Secure{% endblock %}
-
 {% block content %}
-
+<!--content starts Here-->
+<!--providing navigation button to switch between vulnerable and secure version while preserving User ID and challenge Content-->
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
         <a class="btn btn-danger btn-sm"
@@ -17,17 +17,17 @@
             Secure
         </a>
     </div>
-
+    <!--back to challenge page button-->
     {% if challenge_id %}
         <a class="btn btn-light btn-sm fw-bold"href="/challenges/{{ challenge_id }}">
         Back to Challenge →
         </a>
     {% endif %}
 </div>
-
+<!--displaying current user ID, target User ID from URL, and explaining the IDOR vuln Concept-->
 <div class="card shadow-sm">
     <div class="card-body">
-
+        <!--Additional note related to Admin-->
         <div class="alert alert-secondary">
             <div><b>Your user id:</b> {{ current_user.id }}</div>
             {% if current_user.is_admin %}
@@ -40,13 +40,15 @@
                 IDOR happens when you can access other users’ data by changing an ID in the URL.
             </div>
         </div>
-
+        <!--in secure mode access denied for unauthorized access-->
         {% if denied or not target_user %}
             <div class="alert alert-danger">
                 <b>Access denied.</b>
+                <!--displaying user data when access is allowed (simulation of data exposure in vuln mode)-->
                 <div class="small">Secure mode checks that you are allowed to access this user.</div>
             </div>
         {% else %}
+        <!--conditionally showing the username, email, and role -->
         <h5>👤 User Data</h5>
         <div class="border rounded p-2">
             <div><b>Username:</b> {{ target_user.username }}</div>
@@ -60,7 +62,7 @@
             {% endif %}
         </div>
         {% endif %}
-
+        <!--displaying success message and flag when user accesses another user's data in vuln mode-->
         {% if flag %}
             <div class="alert alert-success mt-3">
                 <div class="fw-bold">🎉 Success! You accessed another user’s data.</div>
@@ -68,13 +70,14 @@
                 <hr class="my-2">
                 <div class="d-flex gap-2 align-items-center">
                 <code class="p-2 bg-light rounded flex-grow-1" id="flagText">{{ flag }}</code>
+                <!--providing copy-to-clipboard function for the flag-->
                 <button class="btn btn-outline-dark btn-sm" type="button" onclick="copyFlag()">Copy</button>
                 </div>
             </div>
         {% endif %}
 
         <hr>
-
+        <!--explaining why the vulnerability works(lack of authorization check) versus secure enforcement-->
         <h5> Why this worked</h5>
         {% if mode == "vuln" %}
             <p class="text-muted">
@@ -85,7 +88,7 @@
                 The app enforces authorization: you can only access your own account (unless you're an admin).
             </p>
         {% endif %}
-
+        <!--mitigation-->
         <h5 class="mt-3"> How it’s fixed</h5>
         <p class="text-muted">
             Always enforce authorization on the server. Never trust IDs from the URL without checking access permissions.
@@ -93,7 +96,7 @@
 
     </div>
 </div>
-
+<!--JavaScript function to copy the flag text to clipboard-->
 <script>
 function copyFlag() {
     const el = document.getElementById("flagText");
@@ -101,4 +104,5 @@ function copyFlag() {
     navigator.clipboard.writeText(el.innerText).then(() => alert("Flag copied ✅"));
 }
 </script>
+<!--content ends here-->
 {% endblock %}

@@ -1,12 +1,14 @@
-﻿{% extends "base.html" %}
-
+﻿<!--Extending Base Template-->
+{% extends "base.html" %}
 {% block title %}Leaderboard{% endblock %}
 {% block header %}Leaderboard{% endblock %}
 {% block subheader %}Top users by total points{% endblock %}
-
 {% block content %}
+<!--content starts here-->
 <div class="card shadow-sm">
+    <!--layout to display leaderboard-->
     <div class="card-body">
+        <!--table for ranking position-->
         <table class="table table-striped mb-0">
         <thead>
         <tr>
@@ -16,19 +18,22 @@
         </tr>
         </thead>
         <tbody>
+        <!--loops through user dynamically and display their rank-->
         {% for u in users %}
         <tr>
+            <!--loop index to auto generate ranking position-->
             <td>{{ loop.index }}</td>
             <td>{{ u.username }}</td>
             <td>{{ u.points }}</td>
         </tr>
         {% endfor %}
+        <!--close table and card layout-->
         </tbody>
     </table>
 </div>
 </div>
 </main>
-
+<!--Quote section here-->
 <section class="quote-section text-center">
 
     <div class="container py-5">
@@ -47,6 +52,7 @@
     </div>
 
 </section>
-
+<!--reopen main container for design purpose-->
 <main class="container pb-5">
+<!--content end here-->
 {% endblock %}
