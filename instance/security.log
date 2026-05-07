@@ -125,3 +125,14 @@
 2026-03-20T11:23:35.574296 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
 2026-03-20T11:26:40.873363 | LOGOUT | user=anonymous | extra=None
 2026-03-20T11:27:14.339801 | LOGIN_SUCCESS | user=yon25 | extra={'ip': '127.0.0.1'}
+2026-05-06T17:05:39.545106 | LOGIN_SUCCESS | user=yonas1 | extra={'ip': '127.0.0.1'}
+2026-05-07T12:09:27.477926 | LOGOUT | user=anonymous | extra=None
+2026-05-07T12:13:18.403084 | LOGIN_SUCCESS | user=admin | extra={'ip': '127.0.0.1'}
+2026-05-07T12:37:24.887349 | LOGOUT | user=anonymous | extra=None
+2026-05-07T12:37:38.307522 | LOGIN_SUCCESS | user=yonas1 | extra={'ip': '127.0.0.1'}
+2026-05-07T12:40:04.092727 | LOGOUT | user=anonymous | extra=None
+2026-05-07T12:40:13.474129 | LOGIN_FAILED | user=yonas1 | extra={'email': 'yonas1@gmail.com', 'ip': '127.0.0.1'}
+2026-05-07T12:40:31.703684 | LOGIN_FAILED | user=yonas1 | extra={'email': 'yonas1@gmail.com', 'ip': '127.0.0.1'}
+2026-05-07T12:41:28.930513 | LOGIN_SUCCESS | user=yonas1 | extra={'ip': '127.0.0.1'}
+2026-05-07T12:49:34.559357 | ACCESS_DENIED | user=yonas1 | extra=None
+2026-05-07T13:03:58.109425 | LOGOUT | user=anonymous | extra=None
